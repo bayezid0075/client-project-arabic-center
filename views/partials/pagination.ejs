@@ -1,0 +1,20 @@
+<% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+<nav class="pagination" aria-label="Page navigation">
+  <% if (page > 1) { %>
+    <a href="?<%= typeof search !== 'undefined' && search ? 'search=' + encodeURIComponent(search) + '&' : '' %>page=<%= page - 1 %>" class="pagination-btn">&laquo; Prev</a>
+  <% } %>
+
+  <% for (let i = 1; i <= totalPages; i++) { %>
+    <% if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) { %>
+      <a href="?<%= typeof search !== 'undefined' && search ? 'search=' + encodeURIComponent(search) + '&' : '' %>page=<%= i %>"
+         class="pagination-btn<%= i === page ? ' active' : '' %>"><%= i %></a>
+    <% } else if (i === page - 3 || i === page + 3) { %>
+      <span class="pagination-ellipsis">...</span>
+    <% } %>
+  <% } %>
+
+  <% if (page < totalPages) { %>
+    <a href="?<%= typeof search !== 'undefined' && search ? 'search=' + encodeURIComponent(search) + '&' : '' %>page=<%= page + 1 %>" class="pagination-btn">Next &raquo;</a>
+  <% } %>
+</nav>
+<% } %>

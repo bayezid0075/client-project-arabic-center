@@ -1,0 +1,118 @@
+<section class="hero">
+  <div class="container">
+    <span class="label">[ EST. 2020 / PROFESSIONAL TRAINING ]</span>
+    <h1>BUILD SKILLS.<br>BUILD YOUR FUTURE.</h1>
+    <p>Practical technology and professional training designed to help students build real-world skills for the modern workforce.</p>
+    <div class="hero-actions">
+      <a href="/courses" class="btn btn--primary">Explore Programs</a>
+      <a href="/verify" class="btn btn--secondary">Verify Certificate</a>
+    </div>
+  </div>
+</section>
+
+<section class="verify-section">
+  <div class="container">
+    <div class="verify-box">
+      <span class="label">[ CERTIFICATE VERIFICATION ]</span>
+      <h3>VERIFY A CERTIFICATE</h3>
+      <p>Enter the certificate number or verification code to verify its authenticity.</p>
+      <form action="/verify" method="POST" class="verify-form">
+        <input type="text" name="cert_number" class="form-input" placeholder="CERT-2026-000123" required>
+        <button type="submit" class="btn btn--primary">VERIFY</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<% if (typeof courses !== 'undefined' && courses && courses.length > 0) { %>
+<section class="section">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="label">[ TRAINING PROGRAMS ]</span>
+      <h2>OUR COURSES</h2>
+      <p style="margin: 0 auto;">Industry-relevant training programs designed to prepare you for the modern workforce.</p>
+    </div>
+    <div class="courses-grid">
+      <% courses.forEach(function(course) { %>
+      <div class="course-card">
+        <span class="course-code"><%= course.code %></span>
+        <h3><%= course.name %></h3>
+        <p><%= course.description ? course.description.substring(0, 120) + '...' : '' %></p>
+        <div class="course-meta">
+          <span class="duration"><%= course.duration || 'N/A' %></span>
+          <span class="fee">&#2547; <%= parseFloat(course.fee).toLocaleString() %></span>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="label">[ WHY CHOOSE US ]</span>
+      <h2>BUILT FOR RESULTS</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#9881;</div>
+        <h4>Practical Training</h4>
+        <p>Hands-on learning with real-world projects and industry-standard tools.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#9733;</div>
+        <h4>Expert Instructors</h4>
+        <p>Learn from professionals with years of industry experience.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#9878;</div>
+        <h4>Industry Curriculum</h4>
+        <p>Programs designed with input from leading industry professionals.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#10003;</div>
+        <h4>Certified Programs</h4>
+        <p>Receive verified, recognized certificates upon completion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container text-center">
+    <span class="label">[ OUR TRACK RECORD ]</span>
+    <h2 style="margin-bottom: 2rem;">BY THE NUMBERS</h2>
+    <div class="stats-row">
+      <div class="stat-item">
+        <h3>500+</h3>
+        <p>Students Trained</p>
+      </div>
+      <div class="stat-item">
+        <h3>25+</h3>
+        <p>Courses Available</p>
+      </div>
+      <div class="stat-item">
+        <h3>15+</h3>
+        <p>Expert Instructors</p>
+      </div>
+      <div class="stat-item">
+        <h3>95%</h3>
+        <p>Completion Rate</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <span class="label" style="color: var(--orange);">[ START YOUR JOURNEY ]</span>
+    <h2>READY TO BUILD YOUR FUTURE?</h2>
+    <p>Join hundreds of students who have transformed their careers through our training programs.</p>
+    <div class="hero-actions" style="justify-content: center;">
+      <a href="/contact" class="btn btn--primary">Get In Touch</a>
+      <a href="/courses" class="btn btn--secondary">View Courses</a>
+    </div>
+  </div>
+</section>

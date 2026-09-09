@@ -1,0 +1,166 @@
+<div class="stats-grid">
+  <div class="stat-card stat-card--blue">
+    <span class="label">TOTAL STUDENTS</span>
+    <div class="stat-value"><%= studentStats.total %></div>
+    <div class="stat-meta"><%= studentStats.active %> active</div>
+  </div>
+  <div class="stat-card stat-card--orange">
+    <span class="label">CERTIFICATES</span>
+    <div class="stat-value"><%= certStats.total %></div>
+    <div class="stat-meta"><%= certStats.valid %> valid</div>
+  </div>
+  <div class="stat-card stat-card--green">
+    <span class="label">TOTAL REVENUE</span>
+    <div class="stat-value">&#2547; <%= parseFloat(invoiceStats.totalRevenue || 0).toLocaleString() %></div>
+    <div class="stat-meta"><%= invoiceStats.total %> invoices</div>
+  </div>
+  <div class="stat-card stat-card--red">
+    <span class="label">OPEN ISSUES</span>
+    <div class="stat-value"><%= issueStats.open %></div>
+    <div class="stat-meta"><%= issueStats.inProgress %> in progress</div>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="admin-table-card">
+    <div class="card-header">
+      <h3>RECENT STUDENTS</h3>
+      <a href="/admin/students" class="btn btn--ghost btn--sm">VIEW ALL</a>
+    </div>
+    <% if (recentStudents && recentStudents.length > 0) { %>
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>COURSE</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentStudents.forEach(function(s) { %>
+          <tr>
+            <td class="mono"><%= s.student_id %></td>
+            <td><%= s.full_name %></td>
+            <td><%= s.course_name || 'N/A' %></td>
+            <td><span class="badge badge--<%= s.status %>"><%= s.status %></span></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <p>No students yet.</p>
+    </div>
+    <% } %>
+  </div>
+
+  <div class="admin-table-card">
+    <div class="card-header">
+      <h3>RECENT CERTIFICATES</h3>
+      <a href="/admin/certificates" class="btn btn--ghost btn--sm">VIEW ALL</a>
+    </div>
+    <% if (recentCerts && recentCerts.length > 0) { %>
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>CERT #</th>
+            <th>STUDENT</th>
+            <th>COURSE</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentCerts.forEach(function(c) { %>
+          <tr>
+            <td class="mono"><%= c.certificate_number %></td>
+            <td><%= c.student_name %></td>
+            <td><%= c.course_name || 'N/A' %></td>
+            <td><span class="badge badge--<%= c.status %>"><%= c.status %></span></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <p>No certificates yet.</p>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<div class="dashboard-grid" style="margin-top: 1rem;">
+  <div class="admin-table-card">
+    <div class="card-header">
+      <h3>RECENT INVOICES</h3>
+      <a href="/admin/invoices" class="btn btn--ghost btn--sm">VIEW ALL</a>
+    </div>
+    <% if (recentInvoices && recentInvoices.length > 0) { %>
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>INVOICE #</th>
+            <th>STUDENT</th>
+            <th>AMOUNT</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentInvoices.forEach(function(inv) { %>
+          <tr>
+            <td class="mono"><%= inv.invoice_number %></td>
+            <td><%= inv.student_name %></td>
+            <td class="mono">&#2547; <%= parseFloat(inv.total_amount).toLocaleString() %></td>
+            <td><span class="badge badge--<%= inv.payment_status %>"><%= inv.payment_status %></span></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <p>No invoices yet.</p>
+    </div>
+    <% } %>
+  </div>
+
+  <div class="admin-table-card">
+    <div class="card-header">
+      <h3>RECENT ISSUES</h3>
+      <a href="/admin/issues" class="btn btn--ghost btn--sm">VIEW ALL</a>
+    </div>
+    <% if (recentIssues && recentIssues.length > 0) { %>
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ISSUE #</th>
+            <th>STUDENT</th>
+            <th>PRIORITY</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentIssues.forEach(function(issue) { %>
+          <tr>
+            <td class="mono"><%= issue.issue_id %></td>
+            <td><%= issue.student_name %></td>
+            <td><span class="badge badge--<%= issue.priority %>"><%= issue.priority %></span></td>
+            <td><span class="badge badge--<%= issue.status %>"><%= issue.status %></span></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <p>No issues yet.</p>
+    </div>
+    <% } %>
+  </div>
+</div>

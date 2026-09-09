@@ -1,0 +1,95 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ EDIT INVOICE #<%= invoice.invoice_number %> ]</span>
+    <h2>Edit Invoice</h2>
+  </div>
+  <a href="/admin/invoices/<%= invoice.id %>" class="btn btn--outline">&larr; BACK</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/admin/invoices/<%= invoice.id %>/update" method="POST" id="invoiceForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Invoice Number</label>
+          <input type="text" name="invoice_number" class="form-input" value="<%= invoice.invoice_number %>" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Student *</label>
+          <select name="student_id" class="form-select" required>
+            <% students.forEach(function(student) { %>
+              <option value="<%= student.id %>" <%= invoice.student_id == student.id ? 'selected' : '' %>><%= student.full_name %> (<%= student.student_id %>)</option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Course</label>
+          <select name="course_id" class="form-select">
+            <option value="">Select Course</option>
+            <% courses.forEach(function(course) { %>
+              <option value="<%= course.id %>" <%= invoice.course_id == course.id ? 'selected' : '' %>><%= course.name %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payment Status</label>
+          <select name="payment_status" class="form-select">
+            <option value="pending" <%= invoice.payment_status === 'pending' ? 'selected' : '' %>>Pending</option>
+            <option value="partial" <%= invoice.payment_status === 'partial' ? 'selected' : '' %>>Partial</option>
+            <option value="paid" <%= invoice.payment_status === 'paid' ? 'selected' : '' %>>Paid</option>
+            <option value="overdue" <%= invoice.payment_status === 'overdue' ? 'selected' : '' %>>Overdue</option>
+            <option value="cancelled" <%= invoice.payment_status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-textarea" rows="2"><%= invoice.description || '' %></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Amount *</label>
+          <input type="number" name="amount" id="amount" class="form-input" step="0.01" min="0" value="<%= invoice.amount %>" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discount</label>
+          <input type="number" name="discount" id="discount" class="form-input" step="0.01" min="0" value="<%= invoice.discount %>">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tax Rate (%)</label>
+          <input type="number" name="tax_rate" id="tax_rate" class="form-input" step="0.01" min="0" max="100" value="<%= invoice.tax_rate %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Paid Amount</label>
+          <input type="number" name="paid_amount" class="form-input" step="0.01" min="0" value="<%= invoice.paid_amount %>">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Issue Date</label>
+          <input type="date" name="issue_date" class="form-input" value="<%= invoice.issue_date ? new Date(invoice.issue_date).toISOString().split('T')[0] : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Due Date</label>
+          <input type="date" name="due_date" class="form-input" value="<%= invoice.due_date ? new Date(invoice.due_date).toISOString().split('T')[0] : '' %>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">TOTAL AMOUNT</label>
+        <div id="totalDisplay" style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; padding: 0.625rem 0;">&#2547; <%= parseFloat(invoice.total_amount).toLocaleString() %></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea name="notes" class="form-textarea" rows="2"><%= invoice.notes || '' %></textarea>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn--primary">UPDATE INVOICE</button>
+        <a href="/admin/invoices/<%= invoice.id %>" class="btn btn--outline">CANCEL</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ EDIT STUDENT #<%= student.student_id %> ]</span>
+    <h2><%= student.full_name %></h2>
+  </div>
+  <a href="/admin/students/<%= student.id %>" class="btn btn--outline">&larr; BACK</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/admin/students/<%= student.id %>/update" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Student ID</label>
+          <input type="text" class="form-input" value="<%= student.student_id %>" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" name="full_name" class="form-input" value="<%= student.full_name %>" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Father's Name</label>
+          <input type="text" name="father_name" class="form-input" value="<%= student.father_name || '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mother's Name</label>
+          <input type="text" name="mother_name" class="form-input" value="<%= student.mother_name || '' %>">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" name="date_of_birth" class="form-input" value="<%= student.date_of_birth ? new Date(student.date_of_birth).toISOString().split('T')[0] : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <select name="gender" class="form-select">
+            <option value="male" <%= student.gender === 'male' ? 'selected' : '' %>>Male</option>
+            <option value="female" <%= student.gender === 'female' ? 'selected' : '' %>>Female</option>
+            <option value="other" <%= student.gender === 'other' ? 'selected' : '' %>>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input type="text" name="phone" class="form-input" value="<%= student.phone || '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input" value="<%= student.email || '' %>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Address</label>
+        <textarea name="address" class="form-textarea" rows="2"><%= student.address || '' %></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Enrollment Date</label>
+          <input type="date" name="enrollment_date" class="form-input" value="<%= student.enrollment_date ? new Date(student.enrollment_date).toISOString().split('T')[0] : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course</label>
+          <select name="course_id" class="form-select">
+            <option value="">Select Course</option>
+            <% courses.forEach(function(course) { %>
+              <option value="<%= course.id %>" <%= student.course_id == course.id ? 'selected' : '' %>><%= course.name %> (<%= course.code %>)</option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Batch</label>
+          <select name="batch_id" class="form-select">
+            <option value="">Select Batch</option>
+            <% batches.forEach(function(batch) { %>
+              <option value="<%= batch.id %>" <%= student.batch_id == batch.id ? 'selected' : '' %>><%= batch.name %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="active" <%= student.status === 'active' ? 'selected' : '' %>>Active</option>
+            <option value="completed" <%= student.status === 'completed' ? 'selected' : '' %>>Completed</option>
+            <option value="dropped" <%= student.status === 'dropped' ? 'selected' : '' %>>Dropped</option>
+            <option value="suspended" <%= student.status === 'suspended' ? 'selected' : '' %>>Suspended</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea name="notes" class="form-textarea" rows="3"><%= student.notes || '' %></textarea>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn--primary">UPDATE STUDENT</button>
+        <a href="/admin/students/<%= student.id %>" class="btn btn--outline">CANCEL</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div style="margin-top: 1.5rem;">
+  <form action="/admin/students/<%= student.id %>/delete" method="POST" data-confirm="Are you sure you want to delete this student? This action cannot be undone.">
+    <button type="submit" class="btn btn--danger btn--sm">DELETE STUDENT</button>
+  </form>
+</div>

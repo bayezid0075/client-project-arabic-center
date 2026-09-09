@@ -1,0 +1,70 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ STUDENT MANAGEMENT ]</span>
+    <h2>ALL STUDENTS</h2>
+  </div>
+  <a href="/admin/students/create" class="btn btn--primary">+ ADD STUDENT</a>
+</div>
+
+<form action="/admin/students" method="GET" class="search-bar">
+  <input type="text" name="search" class="form-input" placeholder="Search by name, ID, phone, or email..." value="<%= search %>">
+  <button type="submit" class="btn btn--outline">SEARCH</button>
+  <% if (search) { %>
+    <a href="/admin/students" class="btn btn--ghost">CLEAR</a>
+  <% } %>
+</form>
+
+<div class="admin-table-card">
+  <% if (students && students.length > 0) { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STUDENT ID</th>
+          <th>NAME</th>
+          <th>COURSE</th>
+          <th>BATCH</th>
+          <th>PHONE</th>
+          <th>STATUS</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% students.forEach(function(student) { %>
+        <tr>
+          <td class="mono"><%= student.student_id %></td>
+          <td><strong><%= student.full_name %></strong></td>
+          <td><%= student.course_name || 'N/A' %></td>
+          <td><%= student.batch_name || 'N/A' %></td>
+          <td class="mono"><%= student.phone || 'N/A' %></td>
+          <td><span class="badge badge--<%= student.status %>"><%= student.status %></span></td>
+          <td>
+            <div class="table-actions">
+              <a href="/admin/students/<%= student.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+              <a href="/admin/students/<%= student.id %>/edit" class="btn btn--ghost btn--sm">EDIT</a>
+            </div>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="label">[ NO DATA ]</span>
+    <h3>NO STUDENTS FOUND</h3>
+    <p><%= search ? 'No students match your search criteria.' : 'No students have been enrolled yet.' %></p>
+    <% if (search) { %>
+      <a href="/admin/students" class="btn btn--outline">CLEAR FILTERS</a>
+    <% } else { %>
+      <a href="/admin/students/create" class="btn btn--primary">+ ADD STUDENT</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../../partials/pagination') %>
+
+<p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+  Showing <%= students ? students.length : 0 %> of <%= total %> students
+</p>

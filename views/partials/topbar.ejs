@@ -1,0 +1,16 @@
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+
+    <div class="topbar-title">
+      <h1><%= typeof title !== 'undefined' ? title : 'Dashboard' %></h1>
+    </div>
+
+    <div class="topbar-user">
+      <span class="topbar-user-name"><%= typeof fullName !== 'undefined' ? fullName : 'Admin' %></span>
+      <span class="topbar-role-badge">ADMIN</span>
+    </div>
+  </div>
+</header>

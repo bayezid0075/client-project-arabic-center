@@ -1,0 +1,70 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ ISSUE TRACKING ]</span>
+    <h2>STUDENT ISSUES</h2>
+  </div>
+  <a href="/admin/issues/create" class="btn btn--primary">+ CREATE ISSUE</a>
+</div>
+
+<form action="/admin/issues" method="GET" class="search-bar">
+  <input type="text" name="search" class="form-input" placeholder="Search by issue ID, student name, subject, status, or priority..." value="<%= search %>">
+  <button type="submit" class="btn btn--outline">SEARCH</button>
+  <% if (search) { %>
+    <a href="/admin/issues" class="btn btn--ghost">CLEAR</a>
+  <% } %>
+</form>
+
+<div class="admin-table-card">
+  <% if (issues && issues.length > 0) { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ISSUE ID</th>
+        <th>STUDENT</th>
+        <th>TYPE</th>
+        <th>SUBJECT</th>
+        <th>PRIORITY</th>
+        <th>STATUS</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% issues.forEach(function(issue) { %>
+      <tr>
+        <td class="mono"><%= issue.issue_id %></td>
+        <td><%= issue.student_name %></td>
+        <td><%= issue.issue_type %></td>
+        <td><%= issue.subject %></td>
+        <td><span class="badge badge--<%= issue.priority %>"><%= issue.priority %></span></td>
+        <td><span class="badge badge--<%= issue.status %>"><%= issue.status %></span></td>
+        <td>
+          <div class="table-actions">
+            <a href="/admin/issues/<%= issue.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+            <a href="/admin/issues/<%= issue.id %>/edit" class="btn btn--ghost btn--sm">EDIT</a>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="label">[ NO DATA ]</span>
+    <h3>NO ISSUES FOUND</h3>
+    <p><%= search ? 'No issues match your search criteria.' : 'No issues have been reported yet.' %></p>
+    <% if (search) { %>
+      <a href="/admin/issues" class="btn btn--outline">CLEAR FILTERS</a>
+    <% } else { %>
+      <a href="/admin/issues/create" class="btn btn--primary">+ CREATE ISSUE</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../../partials/pagination') %>
+
+<p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+  Showing <%= issues ? issues.length : 0 %> of <%= total %> issues
+</p>

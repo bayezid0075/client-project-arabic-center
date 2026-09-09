@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice - <%= invoice.invoice_number %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Space Grotesk', sans-serif; background: #f0f0f0; padding: 2rem; }
+    @page { size: A4; margin: 15mm; }
+    .invoice {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #fff;
+      padding: 15mm;
+      position: relative;
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid #111;
+    }
+    .invoice-logo { font-size: 1.5rem; font-weight: 700; }
+    .invoice-logo span { color: #E85D04; }
+    .invoice-center-info { font-size: 0.75rem; color: #666; margin-top: 0.25rem; }
+    .invoice-title { text-align: right; }
+    .invoice-title h1 { font-size: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+    .invoice-title .invoice-number { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: #E85D04; margin-top: 0.25rem; }
+    .invoice-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .invoice-section h3 {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #888;
+      margin-bottom: 0.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .invoice-section p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+    .invoice-table th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      border-bottom: 2px solid #111;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .invoice-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #eee;
+      font-size: 0.85rem;
+    }
+    .invoice-table td:last-child { text-align: right; }
+    .invoice-table th:last-child { text-align: right; }
+    .invoice-totals {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2rem;
+    }
+    .invoice-totals-box {
+      width: 300px;
+    }
+    .invoice-total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      font-size: 0.85rem;
+    }
+    .invoice-total-row.grand {
+      border-top: 2px solid #111;
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .invoice-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 1px solid;
+    }
+    .invoice-status.paid { color: #2E7D32; border-color: #2E7D32; background: rgba(46,125,50,0.05); }
+    .invoice-status.partial { color: #E85D04; border-color: #E85D04; background: rgba(232,93,4,0.05); }
+    .invoice-status.pending { color: #B3261E; border-color: #B3261E; background: rgba(179,38,30,0.05); }
+    .invoice-footer {
+      position: absolute;
+      bottom: 15mm;
+      left: 15mm;
+      right: 15mm;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #888;
+    }
+    .print-btn {
+      position: fixed; top: 1rem; right: 1rem; z-index: 1000;
+      padding: 0.5rem 1rem; background: #111; color: #fff; border: none;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; text-transform: uppercase;
+    }
+    .print-btn:hover { background: #E85D04; }
+    @media print {
+      .print-btn { display: none; }
+      body { background: white; padding: 0; }
+      .invoice { box-shadow: none; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-btn" onclick="window.print()">PRINT INVOICE</button>
+
+  <div class="invoice">
+    <div class="invoice-header">
+      <div>
+        <div class="invoice-logo">&#9632; TRAINING <span>CENTER</span></div>
+        <div class="invoice-center-info">
+          123 Training Street, Education District<br>
+          Dhaka, Bangladesh<br>
+          +880 1234-567890<br>
+          info@trainingcenter.com
+        </div>
+      </div>
+      <div class="invoice-title">
+        <h1>INVOICE</h1>
+        <div class="invoice-number"><%= invoice.invoice_number %></div>
+      </div>
+    </div>
+
+    <div class="invoice-meta">
+      <div class="invoice-section">
+        <h3>Bill To</h3>
+        <p>
+          <strong><%= invoice.student_name %></strong><br>
+          Student ID: <%= invoice.student_code %><br>
+          <% if (invoice.student_address) { %><%= invoice.student_address %><br><% } %>
+          <% if (invoice.student_phone) { %>Phone: <%= invoice.student_phone %><br><% } %>
+          <% if (invoice.student_email) { %>Email: <%= invoice.student_email %><% } %>
+        </p>
+      </div>
+      <div class="invoice-section">
+        <h3>Invoice Details</h3>
+        <p>
+          <strong>Date:</strong> <%= invoice.issue_date ? new Date(invoice.issue_date).toLocaleDateString() : 'N/A' %><br>
+          <strong>Due Date:</strong> <%= invoice.due_date ? new Date(invoice.due_date).toLocaleDateString() : 'N/A' %><br>
+          <strong>Status:</strong> <span class="invoice-status <%= invoice.payment_status %>"><%= invoice.payment_status.toUpperCase() %></span>
+        </p>
+      </div>
+    </div>
+
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= invoice.description || invoice.course_name || 'Training Program' %></td>
+          <td>&#2547; <%= parseFloat(invoice.amount).toLocaleString() %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="invoice-totals">
+      <div class="invoice-totals-box">
+        <div class="invoice-total-row">
+          <span>Subtotal</span>
+          <span>&#2547; <%= parseFloat(invoice.amount).toLocaleString() %></span>
+        </div>
+        <% if (parseFloat(invoice.discount) > 0) { %>
+        <div class="invoice-total-row">
+          <span>Discount</span>
+          <span>- &#2547; <%= parseFloat(invoice.discount).toLocaleString() %></span>
+        </div>
+        <% } %>
+        <% if (parseFloat(invoice.tax_amount) > 0) { %>
+        <div class="invoice-total-row">
+          <span>Tax (<%= invoice.tax_rate %>%)</span>
+          <span>&#2547; <%= parseFloat(invoice.tax_amount).toLocaleString() %></span>
+        </div>
+        <% } %>
+        <div class="invoice-total-row grand">
+          <span>TOTAL</span>
+          <span>&#2547; <%= parseFloat(invoice.total_amount).toLocaleString() %></span>
+        </div>
+        <div class="invoice-total-row" style="color: #2E7D32;">
+          <span>Paid</span>
+          <span>&#2547; <%= parseFloat(invoice.paid_amount).toLocaleString() %></span>
+        </div>
+        <% if (parseFloat(invoice.due_amount) > 0) { %>
+        <div class="invoice-total-row" style="color: #B3261E; font-weight: 600;">
+          <span>Due</span>
+          <span>&#2547; <%= parseFloat(invoice.due_amount).toLocaleString() %></span>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <% if (invoice.notes) { %>
+    <div style="margin-bottom: 2rem;">
+      <h3 style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: #888; margin-bottom: 0.5rem; font-family: 'IBM Plex Mono', monospace;">NOTES</h3>
+      <p style="font-size: 0.85rem; color: #666;"><%= invoice.notes %></p>
+    </div>
+    <% } %>
+
+    <div class="invoice-footer">
+      <span>Thank you for your business!</span>
+      <span>Training Center | <%= invoice.invoice_number %></span>
+    </div>
+  </div>
+</body>
+</html>

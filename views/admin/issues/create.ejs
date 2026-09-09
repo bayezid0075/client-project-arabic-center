@@ -1,0 +1,83 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ NEW ISSUE ]</span>
+    <h2>CREATE NEW ISSUE</h2>
+  </div>
+  <a href="/admin/issues" class="btn btn--outline">&larr; BACK TO LIST</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/admin/issues" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Issue ID</label>
+          <input type="text" class="form-input" value="<%= nextId %>" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Student *</label>
+          <select name="student_id" class="form-select" required>
+            <option value="">Select Student</option>
+            <% students.forEach(function(student) { %>
+              <option value="<%= student.id %>"><%= student.full_name %> (<%= student.student_id %>)</option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Issue Type</label>
+          <select name="issue_type" class="form-select">
+            <option value="payment">Payment Issue</option>
+            <option value="attendance">Attendance Issue</option>
+            <option value="certificate">Certificate Issue</option>
+            <option value="course">Course Issue</option>
+            <option value="technical">Technical Issue</option>
+            <option value="administrative">Administrative Issue</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject *</label>
+          <input type="text" name="subject" class="form-input" required placeholder="Brief subject of the issue">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-textarea" rows="4" placeholder="Detailed description of the issue"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select name="priority" class="form-select">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="open">Open</option>
+            <option value="in_progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Assigned To</label>
+        <input type="text" name="assigned_to" class="form-input" placeholder="Person responsible">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Resolution Notes</label>
+        <textarea name="resolution_notes" class="form-textarea" rows="3" placeholder="Notes about resolution (if resolved)"></textarea>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn--primary">CREATE ISSUE</button>
+        <a href="/admin/issues" class="btn btn--outline">CANCEL</a>
+      </div>
+    </form>
+  </div>
+</div>

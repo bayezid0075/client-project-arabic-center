@@ -1,0 +1,71 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ CERTIFICATE MANAGEMENT ]</span>
+    <h2>ALL CERTIFICATES</h2>
+  </div>
+  <a href="/admin/certificates/create" class="btn btn--primary">+ ISSUE CERTIFICATE</a>
+</div>
+
+<form action="/admin/certificates" method="GET" class="search-bar">
+  <input type="text" name="search" class="form-input" placeholder="Search by certificate number, verification code, or student name..." value="<%= search %>">
+  <button type="submit" class="btn btn--outline">SEARCH</button>
+  <% if (search) { %>
+    <a href="/admin/certificates" class="btn btn--ghost">CLEAR</a>
+  <% } %>
+</form>
+
+<div class="admin-table-card">
+  <% if (certificates && certificates.length > 0) { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+    <thead>
+      <tr>
+        <th>CERTIFICATE #</th>
+        <th>STUDENT</th>
+        <th>COURSE</th>
+        <th>ISSUE DATE</th>
+        <th>GRADE</th>
+        <th>STATUS</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% certificates.forEach(function(cert) { %>
+      <tr>
+        <td class="mono"><%= cert.certificate_number %></td>
+        <td><%= cert.student_name %></td>
+        <td><%= cert.course_name || 'N/A' %></td>
+        <td><%= cert.issue_date ? new Date(cert.issue_date).toLocaleDateString() : 'N/A' %></td>
+        <td><span class="badge badge--<%= cert.result %>"><%= cert.grade || 'N/A' %></span></td>
+        <td><span class="badge badge--<%= cert.status %>"><%= cert.status %></span></td>
+        <td>
+          <div class="table-actions">
+            <a href="/admin/certificates/<%= cert.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+            <a href="/admin/certificates/<%= cert.id %>/edit" class="btn btn--ghost btn--sm">EDIT</a>
+            <a href="/admin/certificates/<%= cert.id %>/print" class="btn btn--ghost btn--sm" target="_blank">PRINT</a>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="label">[ NO DATA ]</span>
+    <h3>NO CERTIFICATES FOUND</h3>
+    <p><%= search ? 'No certificates match your search criteria.' : 'No certificates have been issued yet.' %></p>
+    <% if (search) { %>
+      <a href="/admin/certificates" class="btn btn--outline">CLEAR FILTERS</a>
+    <% } else { %>
+      <a href="/admin/certificates/create" class="btn btn--primary">+ ISSUE CERTIFICATE</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../../partials/pagination') %>
+
+<p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+  Showing <%= certificates ? certificates.length : 0 %> of <%= total %> certificates
+</p>

@@ -1,0 +1,79 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ CERTIFICATE #<%= certificate.certificate_number %> ]</span>
+    <h2>Certificate Details</h2>
+  </div>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/admin/certificates/<%= certificate.id %>/edit" class="btn btn--outline">EDIT</a>
+    <a href="/admin/certificates/<%= certificate.id %>/print" class="btn btn--primary" target="_blank">PRINT</a>
+    <a href="/admin/certificates" class="btn btn--ghost">&larr; BACK</a>
+  </div>
+</div>
+
+<div class="detail-card">
+  <div class="detail-card-header">
+    <h3>CERTIFICATE INFORMATION</h3>
+    <span class="badge badge--<%= certificate.status %>"><%= certificate.status.toUpperCase() %></span>
+  </div>
+  <div class="detail-card-body">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">CERTIFICATE NUMBER</span>
+        <span class="value mono"><%= certificate.certificate_number %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">VERIFICATION CODE</span>
+        <span class="value mono"><%= certificate.verification_code %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">STUDENT</span>
+        <span class="value"><%= certificate.student_name %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">STUDENT ID</span>
+        <span class="value mono"><%= certificate.student_code %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">COURSE</span>
+        <span class="value"><%= certificate.course_name || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">BATCH</span>
+        <span class="value"><%= certificate.batch_name || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">ISSUE DATE</span>
+        <span class="value"><%= certificate.issue_date ? new Date(certificate.issue_date).toLocaleDateString() : 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">COMPLETION DATE</span>
+        <span class="value"><%= certificate.completion_date ? new Date(certificate.completion_date).toLocaleDateString() : 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">GRADE</span>
+        <span class="value"><%= certificate.grade || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">RESULT</span>
+        <span class="value"><span class="badge badge--<%= certificate.result %>"><%= certificate.result ? certificate.result.toUpperCase() : 'N/A' %></span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if (certificate.notes) { %>
+<div class="detail-card">
+  <div class="detail-card-header">
+    <h3>NOTES</h3>
+  </div>
+  <div class="detail-card-body">
+    <p style="color: var(--muted);"><%= certificate.notes %></p>
+  </div>
+</div>
+<% } %>
+
+<div style="margin-top: 1.5rem;">
+  <form action="/admin/certificates/<%= certificate.id %>/delete" method="POST" data-confirm="Are you sure you want to delete this certificate?">
+    <button type="submit" class="btn btn--danger btn--sm">DELETE CERTIFICATE</button>
+  </form>
+</div>

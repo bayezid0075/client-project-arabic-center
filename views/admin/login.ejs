@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Training Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-box">
+      <div class="login-logo">
+        <span class="logo-icon">&#9632;</span>
+        <span class="logo-text">TRAINING CENTER</span>
+        <span class="label">[ ADMIN PANEL ]</span>
+      </div>
+
+      <%- include('../partials/flash') %>
+
+      <form action="/admin/login" method="POST">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" name="username" class="form-input" required placeholder="Enter your username" autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-input" required placeholder="Enter your password">
+        </div>
+        <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 0.5rem;">LOGIN</button>
+      </form>
+
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--muted);">
+        <a href="/" style="color: var(--muted);">&larr; Back to website</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.flash-close').forEach(function(btn) {
+      btn.addEventListener('click', function() { this.closest('.flash').remove(); });
+    });
+  </script>
+</body>
+</html>

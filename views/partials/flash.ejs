@@ -1,0 +1,19 @@
+<% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+  <% success.forEach(function(msg) { %>
+    <div class="flash flash--success" role="alert">
+      <span class="flash-icon">&#10003;</span>
+      <span class="flash-message"><%= msg %></span>
+      <button class="flash-close" aria-label="Close">&times;</button>
+    </div>
+  <% }); %>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+  <% error.forEach(function(msg) { %>
+    <div class="flash flash--error" role="alert">
+      <span class="flash-icon">!</span>
+      <span class="flash-message"><%= msg %></span>
+      <button class="flash-close" aria-label="Close">&times;</button>
+    </div>
+  <% }); %>
+<% } %>

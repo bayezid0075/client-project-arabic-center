@@ -1,0 +1,225 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ STUDENT RECORD #<%= student.student_id %> ]</span>
+    <h2><%= student.full_name %></h2>
+  </div>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/admin/students/<%= student.id %>/edit" class="btn btn--outline">EDIT</a>
+    <a href="/admin/students" class="btn btn--ghost">&larr; BACK</a>
+  </div>
+</div>
+
+<div class="detail-card">
+  <div class="detail-card-header">
+    <h3>PERSONAL INFORMATION</h3>
+    <span class="badge badge--<%= student.status %>"><%= student.status %></span>
+  </div>
+  <div class="detail-card-body">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">STUDENT ID</span>
+        <span class="value mono"><%= student.student_id %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">FULL NAME</span>
+        <span class="value"><%= student.full_name %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">FATHER'S NAME</span>
+        <span class="value"><%= student.father_name || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">MOTHER'S NAME</span>
+        <span class="value"><%= student.mother_name || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">DATE OF BIRTH</span>
+        <span class="value"><%= student.date_of_birth ? new Date(student.date_of_birth).toLocaleDateString() : 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">GENDER</span>
+        <span class="value"><%= student.gender ? student.gender.charAt(0).toUpperCase() + student.gender.slice(1) : 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">PHONE</span>
+        <span class="value mono"><%= student.phone || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">EMAIL</span>
+        <span class="value"><%= student.email || 'N/A' %></span>
+      </div>
+      <div class="detail-item" style="grid-column: 1 / -1;">
+        <span class="label">ADDRESS</span>
+        <span class="value"><%= student.address || 'N/A' %></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="detail-card">
+  <div class="detail-card-header">
+    <h3>ENROLLMENT INFORMATION</h3>
+  </div>
+  <div class="detail-card-body">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">ENROLLMENT DATE</span>
+        <span class="value"><%= student.enrollment_date ? new Date(student.enrollment_date).toLocaleDateString() : 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">COURSE</span>
+        <span class="value"><%= student.course_name || 'N/A' %> <span class="mono" style="color: var(--muted);">(<%= student.course_code || '' %>)</span></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">BATCH</span>
+        <span class="value"><%= student.batch_name || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">STATUS</span>
+        <span class="value"><span class="badge badge--<%= student.status %>"><%= student.status.toUpperCase() %></span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs" style="margin-top: 1.5rem;">
+  <button class="tab-btn active" data-tab="tab-certs">CERTIFICATES (<%= certificates.length %>)</button>
+  <button class="tab-btn" data-tab="tab-invoices">INVOICES (<%= invoices.length %>)</button>
+  <button class="tab-btn" data-tab="tab-issues">ISSUES (<%= issues.length %>)</button>
+</div>
+
+<div id="tab-certs" class="tab-content active">
+  <% if (certificates.length > 0) { %>
+  <div class="admin-table-card">
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>CERTIFICATE #</th>
+            <th>COURSE</th>
+            <th>ISSUE DATE</th>
+            <th>GRADE</th>
+            <th>STATUS</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% certificates.forEach(function(cert) { %>
+          <tr>
+            <td class="mono"><%= cert.certificate_number %></td>
+            <td><%= cert.course_name || 'N/A' %></td>
+            <td><%= cert.issue_date ? new Date(cert.issue_date).toLocaleDateString() : 'N/A' %></td>
+            <td><span class="badge badge--<%= cert.result %>"><%= cert.grade || 'N/A' %></span></td>
+            <td><span class="badge badge--<%= cert.status %>"><%= cert.status %></span></td>
+            <td>
+              <div class="table-actions">
+                <a href="/admin/certificates/<%= cert.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <p>No certificates issued for this student.</p>
+  </div>
+  <% } %>
+</div>
+
+<div id="tab-invoices" class="tab-content">
+  <% if (invoices.length > 0) { %>
+  <div class="admin-table-card">
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>INVOICE #</th>
+            <th>DESCRIPTION</th>
+            <th>TOTAL</th>
+            <th>PAID</th>
+            <th>DUE</th>
+            <th>STATUS</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% invoices.forEach(function(inv) { %>
+          <tr>
+            <td class="mono"><%= inv.invoice_number %></td>
+            <td><%= inv.description || 'N/A' %></td>
+            <td class="mono">&#2547; <%= parseFloat(inv.total_amount).toLocaleString() %></td>
+            <td class="mono">&#2547; <%= parseFloat(inv.paid_amount).toLocaleString() %></td>
+            <td class="mono">&#2547; <%= parseFloat(inv.due_amount).toLocaleString() %></td>
+            <td><span class="badge badge--<%= inv.payment_status %>"><%= inv.payment_status %></span></td>
+            <td>
+              <div class="table-actions">
+                <a href="/admin/invoices/<%= inv.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <p>No invoices for this student.</p>
+  </div>
+  <% } %>
+</div>
+
+<div id="tab-issues" class="tab-content">
+  <% if (issues.length > 0) { %>
+  <div class="admin-table-card">
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ISSUE #</th>
+            <th>SUBJECT</th>
+            <th>TYPE</th>
+            <th>PRIORITY</th>
+            <th>STATUS</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% issues.forEach(function(issue) { %>
+          <tr>
+            <td class="mono"><%= issue.issue_id %></td>
+            <td><%= issue.subject %></td>
+            <td><%= issue.issue_type %></td>
+            <td><span class="badge badge--<%= issue.priority %>"><%= issue.priority %></span></td>
+            <td><span class="badge badge--<%= issue.status %>"><%= issue.status %></span></td>
+            <td>
+              <div class="table-actions">
+                <a href="/admin/issues/<%= issue.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <p>No issues reported for this student.</p>
+  </div>
+  <% } %>
+</div>
+
+<% if (student.notes) { %>
+<div class="detail-card" style="margin-top: 1.5rem;">
+  <div class="detail-card-header">
+    <h3>NOTES</h3>
+  </div>
+  <div class="detail-card-body">
+    <p style="color: var(--muted);"><%= student.notes %></p>
+  </div>
+</div>
+<% } %>

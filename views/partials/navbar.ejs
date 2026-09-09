@@ -1,0 +1,23 @@
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="/" class="navbar-logo">
+      <span class="logo-icon">&#9632;</span>
+      <span class="logo-text">TRAINING CENTER</span>
+    </a>
+
+    <nav class="navbar-nav" id="mainNav">
+      <a href="/" class="nav-link<%= typeof page !== 'undefined' && page === 'home' ? ' active' : '' %>">Home</a>
+      <a href="/about" class="nav-link<%= typeof page !== 'undefined' && page === 'about' ? ' active' : '' %>">About</a>
+      <a href="/courses" class="nav-link<%= typeof page !== 'undefined' && page === 'courses' ? ' active' : '' %>">Courses</a>
+      <a href="/verify" class="nav-link<%= typeof page !== 'undefined' && page === 'verify' ? ' active' : '' %>">Verify Certificate</a>
+      <a href="/contact" class="nav-link<%= typeof page !== 'undefined' && page === 'contact' ? ' active' : '' %>">Contact</a>
+      <a href="/admin/login" class="nav-link nav-link--accent">Admin</a>
+    </nav>
+
+    <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>

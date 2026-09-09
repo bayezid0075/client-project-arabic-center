@@ -1,0 +1,86 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ NEW INVOICE ]</span>
+    <h2>CREATE NEW INVOICE</h2>
+  </div>
+  <a href="/admin/invoices" class="btn btn--outline">&larr; BACK TO LIST</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/admin/invoices" method="POST" id="invoiceForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Invoice Number</label>
+          <input type="text" name="invoice_number" class="form-input" value="<%= invoiceNumber %>" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Student *</label>
+          <select name="student_id" class="form-select" required>
+            <option value="">Select Student</option>
+            <% students.forEach(function(student) { %>
+              <option value="<%= student.id %>"><%= student.full_name %> (<%= student.student_id %>)</option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Course</label>
+          <select name="course_id" class="form-select">
+            <option value="">Select Course</option>
+            <% courses.forEach(function(course) { %>
+              <option value="<%= course.id %>"><%= course.name %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Issue Date</label>
+          <input type="date" name="issue_date" class="form-input" value="<%= new Date().toISOString().split('T')[0] %>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-textarea" rows="2" placeholder="Invoice description"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Amount *</label>
+          <input type="number" name="amount" id="amount" class="form-input" step="0.01" min="0" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discount</label>
+          <input type="number" name="discount" id="discount" class="form-input" step="0.01" min="0" value="0" placeholder="0.00">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tax Rate (%)</label>
+          <input type="number" name="tax_rate" id="tax_rate" class="form-input" step="0.01" min="0" max="100" value="0" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Paid Amount</label>
+          <input type="number" name="paid_amount" class="form-input" step="0.01" min="0" value="0" placeholder="0.00">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Due Date</label>
+          <input type="date" name="due_date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">TOTAL AMOUNT</label>
+          <div id="totalDisplay" style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; padding: 0.625rem 0;">&#2547; 0.00</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea name="notes" class="form-textarea" rows="2" placeholder="Additional notes"></textarea>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn--primary">CREATE INVOICE</button>
+        <a href="/admin/invoices" class="btn btn--outline">CANCEL</a>
+      </div>
+    </form>
+  </div>
+</div>

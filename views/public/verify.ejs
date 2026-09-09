@@ -1,0 +1,73 @@
+<section class="section">
+  <div class="container">
+    <div class="verify-box" style="margin-top: 2rem;">
+      <span class="label">[ CERTIFICATE VERIFICATION ]</span>
+      <h3>VERIFY A CERTIFICATE</h3>
+      <p>Enter the certificate number or verification code to verify its authenticity.</p>
+      <form action="/verify" method="POST" class="verify-form">
+        <input type="text" name="cert_number" class="form-input" placeholder="CERT-2026-000123" value="<%= typeof cert_number !== 'undefined' ? cert_number : '' %>" required>
+        <button type="submit" class="btn btn--primary">VERIFY</button>
+      </form>
+    </div>
+
+    <% if (typeof searched !== 'undefined' && searched) { %>
+      <% if (certificate) { %>
+        <div class="verify-result verify-result--valid">
+          <div class="verify-result-header">
+            <div class="verify-icon">&#10003;</div>
+            <div>
+              <h3>CERTIFICATE VERIFIED</h3>
+              <span class="label">This certificate is authentic and valid</span>
+            </div>
+          </div>
+          <div class="verify-result-body">
+            <div class="verify-detail">
+              <span class="label">CERTIFICATE NUMBER</span>
+              <span class="value mono"><%= certificate.certificate_number %></span>
+            </div>
+            <div class="verify-detail">
+              <span class="label">STUDENT NAME</span>
+              <span class="value"><%= certificate.student_name %></span>
+            </div>
+            <div class="verify-detail">
+              <span class="label">COURSE</span>
+              <span class="value"><%= certificate.course_name %></span>
+            </div>
+            <div class="verify-detail">
+              <span class="label">ISSUE DATE</span>
+              <span class="value"><%= certificate.issue_date ? new Date(certificate.issue_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A' %></span>
+            </div>
+            <div class="verify-detail">
+              <span class="label">STATUS</span>
+              <span class="value">
+                <span class="badge badge--<%= certificate.status %>"><%= certificate.status.toUpperCase() %> &#10003;</span>
+              </span>
+            </div>
+            <div class="verify-detail">
+              <span class="label">RESULT</span>
+              <span class="value">
+                <span class="badge badge--<%= certificate.result %>"><%= certificate.result ? certificate.result.toUpperCase() : 'N/A' %></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="verify-result verify-result--invalid">
+          <div class="verify-result-header">
+            <div class="verify-icon">!</div>
+            <div>
+              <h3>CERTIFICATE NOT FOUND</h3>
+              <span class="label">No matching certificate could be found</span>
+            </div>
+          </div>
+          <div class="verify-result-body">
+            <p style="color: var(--muted); text-align: center;">
+              Please check the certificate number or verification code and try again.
+              If you believe this is an error, please contact our administration.
+            </p>
+          </div>
+        </div>
+      <% } %>
+    <% } %>
+  </div>
+</section>

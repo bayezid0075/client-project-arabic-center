@@ -1,0 +1,73 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ INVOICE MANAGEMENT ]</span>
+    <h2>ALL INVOICES</h2>
+  </div>
+  <a href="/admin/invoices/create" class="btn btn--primary">+ CREATE INVOICE</a>
+</div>
+
+<form action="/admin/invoices" method="GET" class="search-bar">
+  <input type="text" name="search" class="form-input" placeholder="Search by invoice number, student name, or status..." value="<%= search %>">
+  <button type="submit" class="btn btn--outline">SEARCH</button>
+  <% if (search) { %>
+    <a href="/admin/invoices" class="btn btn--ghost">CLEAR</a>
+  <% } %>
+</form>
+
+<div class="admin-table-card">
+  <% if (invoices && invoices.length > 0) { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+    <thead>
+      <tr>
+        <th>INVOICE #</th>
+        <th>STUDENT</th>
+        <th>COURSE</th>
+        <th>TOTAL</th>
+        <th>PAID</th>
+        <th>DUE</th>
+        <th>STATUS</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% invoices.forEach(function(inv) { %>
+      <tr>
+        <td class="mono"><%= inv.invoice_number %></td>
+        <td><%= inv.student_name %></td>
+        <td><%= inv.course_name || 'N/A' %></td>
+        <td class="mono">&#2547; <%= parseFloat(inv.total_amount).toLocaleString() %></td>
+        <td class="mono">&#2547; <%= parseFloat(inv.paid_amount).toLocaleString() %></td>
+        <td class="mono">&#2547; <%= parseFloat(inv.due_amount).toLocaleString() %></td>
+        <td><span class="badge badge--<%= inv.payment_status %>"><%= inv.payment_status %></span></td>
+        <td>
+          <div class="table-actions">
+            <a href="/admin/invoices/<%= inv.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+            <a href="/admin/invoices/<%= inv.id %>/edit" class="btn btn--ghost btn--sm">EDIT</a>
+            <a href="/admin/invoices/<%= inv.id %>/print" class="btn btn--ghost btn--sm" target="_blank">PRINT</a>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="label">[ NO DATA ]</span>
+    <h3>NO INVOICES FOUND</h3>
+    <p><%= search ? 'No invoices match your search criteria.' : 'No invoices have been created yet.' %></p>
+    <% if (search) { %>
+      <a href="/admin/invoices" class="btn btn--outline">CLEAR FILTERS</a>
+    <% } else { %>
+      <a href="/admin/invoices/create" class="btn btn--primary">+ CREATE INVOICE</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../../partials/pagination') %>
+
+<p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+  Showing <%= invoices ? invoices.length : 0 %> of <%= total %> invoices
+</p>
