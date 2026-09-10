@@ -42,6 +42,13 @@
           <span class="duration"><%= course.duration || 'N/A' %></span>
           <span class="fee">&#2547; <%= parseFloat(course.fee).toLocaleString() %></span>
         </div>
+        <% if (course.batches && course.batches.length > 0) { %>
+        <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted);">
+          <% course.batches.forEach(function(batch) { %>
+            <div><%= batch.name %><% if (batch.start_date) { %> - Starts <%= new Date(batch.start_date).toLocaleDateString() %><% } %></div>
+          <% }); %>
+        </div>
+        <% } %>
       </div>
       <% }); %>
     </div>

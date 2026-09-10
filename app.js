@@ -74,6 +74,7 @@ app.use((req, res, next) => {
 
 const publicRoutes = require('./routes/public');
 const authRoutes = require('./routes/auth');
+const courseRoutes = require('./routes/courses');
 const studentRoutes = require('./routes/students');
 const certificateRoutes = require('./routes/certificates');
 const invoiceRoutes = require('./routes/invoices');
@@ -88,6 +89,7 @@ app.get('/admin', requireAuth, (req, res) => res.redirect('/admin/dashboard'));
 app.get('/admin/dashboard', requireAuth, dashboardController.getDashboard);
 
 app.use('/admin/students', requireAuth, studentRoutes);
+app.use('/admin/courses', requireAuth, courseRoutes);
 app.use('/admin/certificates', requireAuth, certificateRoutes);
 app.use('/admin/invoices', requireAuth, invoiceRoutes);
 app.use('/admin/issues', requireAuth, issueRoutes);

@@ -77,4 +77,35 @@ function validateIssue(req, res, next) {
   next();
 }
 
-module.exports = { validateStudent, validateInvoice, validateCertificate, validateIssue };
+function validateCourse(req, res, next) {
+  const errors = [];
+  const { name, code, batch_name } = req.body;
+
+  if (!name || name.trim().length < 2) {
+    errors.push('Course name is required (min 2 characters)');
+  }
+
+  if (!code || code.trim().length < 2) {
+    errors.push('Course code is required (min 2 characters)');
+  }
+
+  if (!batch_name || batch_name.trim().length < 2) {
+    errors.push('Batch name is required (min 2 characters)');
+  }
+
+  if (req.body.fee && parseFloat(req.body.fee) < 0) {
+    errors.push('Fee cannot be negative');
+  }
+
+  if (req.body.max_students && (parseInt(req.body.max_students) < 1 || parseInt(req.body.max_students) > 1000)) {
+    errors.push('Max students must be between 1 and 1000');
+  }
+
+  if (errors.length > 0) {
+    errors.forEach(err => req.flash('error', err));
+    return res.redirect('back');
+  }
+  next();
+}
+
+module.exports = { validateStudent, validateInvoice, validateCertificate, validateIssue, validateCourse };

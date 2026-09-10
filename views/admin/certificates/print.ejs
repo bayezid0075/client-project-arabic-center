@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Certificate - <%= certificate.certificate_number %></title>
+  <title>Certificate - <%= certificate.certificate_number %> | Arabic Technical Training Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,6 +42,7 @@
     .cert-content { text-align: center; position: relative; z-index: 1; }
     .cert-logo { font-size: 2rem; color: #111; margin-bottom: 0.5rem; }
     .cert-logo span { color: #E85D04; }
+    .cert-logo-img { height: 80px; width: auto; object-fit: contain; margin-bottom: 0.5rem; }
     .cert-center-name { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
     .cert-title { font-size: 2.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; color: #111; }
     .cert-subtitle { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; font-style: italic; }
@@ -85,8 +86,8 @@
     <div class="cert-corner br"></div>
 
     <div class="cert-content">
-      <div class="cert-logo">&#9632; TRAINING <span>CENTER</span></div>
-      <div class="cert-center-name">Professional Training Institute</div>
+      <img src="/images/logo.png" alt="Arabic Technical Training Center Logo" class="cert-logo-img">
+      <div class="cert-center-name">Arabic Technical Training Center</div>
 
       <div class="cert-title">CERTIFICATE OF COMPLETION</div>
       <div class="cert-subtitle">This certificate is proudly presented to</div>
@@ -115,7 +116,7 @@
         <div class="cert-signature">
           <div class="cert-signature-line"></div>
           <div class="cert-signature-name">Director</div>
-          <div class="cert-signature-title">Training Center</div>
+          <div class="cert-signature-title">Arabic Technical Training Center</div>
         </div>
         <div class="cert-signature">
           <div class="cert-signature-line"></div>

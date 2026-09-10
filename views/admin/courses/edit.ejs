@@ -1,0 +1,79 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ EDIT COURSE #<%= course.code %> ]</span>
+    <h2><%= course.name %></h2>
+  </div>
+  <a href="/admin/courses/<%= course.id %>" class="btn btn--outline">&larr; BACK</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/admin/courses/<%= course.id %>/update" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Course Name *</label>
+          <input type="text" name="name" class="form-input" value="<%= course.name %>" required maxlength="150">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course Code *</label>
+          <input type="text" name="code" class="form-input" value="<%= course.code %>" required maxlength="20" style="text-transform: uppercase;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-textarea" rows="4"><%= course.description || '' %></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Duration</label>
+          <input type="text" name="duration" class="form-input" value="<%= course.duration || '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fee (&#2547;)</label>
+          <input type="number" name="fee" class="form-input" min="0" step="0.01" value="<%= course.fee %>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select name="is_active" class="form-select">
+          <option value="1" <%= course.is_active ? 'selected' : '' %>>Active</option>
+          <option value="0" <%= !course.is_active ? 'selected' : '' %>>Inactive</option>
+        </select>
+      </div>
+      <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+        <span class="label">[ BATCH INFORMATION ]</span>
+        <h3 style="margin: 0.5rem 0 1rem;">BATCH DETAILS</h3>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Batch Name *</label>
+          <input type="text" name="batch_name" class="form-input" value="<%= batch ? batch.name : '' %>" required placeholder="e.g. Batch A, Morning Batch" maxlength="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Students</label>
+          <input type="number" name="max_students" class="form-input" min="1" value="<%= batch ? batch.max_students : 30 %>" placeholder="30">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input type="date" name="start_date" class="form-input" value="<%= batch && batch.start_date ? new Date(batch.start_date).toISOString().split('T')[0] : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Date</label>
+          <input type="date" name="end_date" class="form-input" value="<%= batch && batch.end_date ? new Date(batch.end_date).toISOString().split('T')[0] : '' %>">
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn--primary">UPDATE COURSE</button>
+        <a href="/admin/courses/<%= course.id %>" class="btn btn--outline">CANCEL</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div style="margin-top: 1.5rem;">
+  <form action="/admin/courses/<%= course.id %>/delete" method="POST" data-confirm="Are you sure you want to delete this course? All associated batches will also be deleted. This action cannot be undone.">
+    <button type="submit" class="btn btn--danger btn--sm">DELETE COURSE</button>
+  </form>
+</div>

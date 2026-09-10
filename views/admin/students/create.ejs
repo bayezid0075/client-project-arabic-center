@@ -59,28 +59,28 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Enrollment Date</label>
-          <input type="date" name="enrollment_date" class="form-input" value="<%= new Date().toISOString().split('T')[0] %>">
-        </div>
-        <div class="form-group">
           <label class="form-label">Course</label>
-          <select name="course_id" class="form-select">
+          <select name="course_id" id="courseSelect" class="form-select">
             <option value="">Select Course</option>
             <% courses.forEach(function(course) { %>
               <option value="<%= course.id %>"><%= course.name %> (<%= course.code %>)</option>
             <% }); %>
           </select>
         </div>
+        <div class="form-group">
+          <label class="form-label">Batch</label>
+          <select name="batch_id" id="batchSelect" class="form-select">
+            <option value="">Select Batch</option>
+            <% batches.forEach(function(batch) { %>
+              <option value="<%= batch.id %>" data-course="<%= batch.course_id %>"><%= batch.name %></option>
+            <% }); %>
+          </select>
+        </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Batch</label>
-          <select name="batch_id" class="form-select">
-            <option value="">Select Batch</option>
-            <% batches.forEach(function(batch) { %>
-              <option value="<%= batch.id %>"><%= batch.name %></option>
-            <% }); %>
-          </select>
+          <label class="form-label">Enrollment Date</label>
+          <input type="date" name="enrollment_date" class="form-input" value="<%= new Date().toISOString().split('T')[0] %>">
         </div>
         <div class="form-group">
           <label class="form-label">Status</label>
@@ -103,3 +103,39 @@
     </form>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const courseSelect = document.getElementById('courseSelect');
+  const batchSelect = document.getElementById('batchSelect');
+  const allBatchOptions = Array.from(batchSelect.querySelectorAll('option[value]'));
+
+  courseSelect.addEventListener('change', function() {
+    const courseId = this.value;
+    batchSelect.innerHTML = '<option value="">Select Batch</option>';
+
+    if (!courseId) {
+      allBatchOptions.forEach(opt => batchSelect.appendChild(opt.cloneNode(true)));
+      return;
+    }
+
+    fetch('/admin/courses/api/batches/' + courseId)
+      .then(res => res.json())
+      .then(batches => {
+        batches.forEach(batch => {
+          const opt = document.createElement('option');
+          opt.value = batch.id;
+          opt.textContent = batch.name;
+          batchSelect.appendChild(opt);
+        });
+      })
+      .catch(() => {
+        allBatchOptions.forEach(opt => {
+          if (opt.dataset.course === courseId) {
+            batchSelect.appendChild(opt.cloneNode(true));
+          }
+        });
+      });
+  });
+});
+</script>

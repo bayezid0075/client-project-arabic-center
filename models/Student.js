@@ -86,9 +86,10 @@ class Student {
 
   static async getRecent(limit = 5) {
     const [rows] = await pool.query(`
-      SELECT s.*, c.name as course_name
+      SELECT s.*, c.name as course_name, b.name as batch_name
       FROM students s
       LEFT JOIN courses c ON s.course_id = c.id
+      LEFT JOIN batches b ON s.batch_id = b.id
       ORDER BY s.created_at DESC LIMIT ?
     `, [limit]);
     return rows;

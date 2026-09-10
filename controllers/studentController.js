@@ -60,7 +60,10 @@ const studentController = {
 
   async postCreate(req, res) {
     try {
-      await Student.create(req.body);
+      const data = { ...req.body };
+      data.course_id = data.course_id || null;
+      data.batch_id = data.batch_id || null;
+      await Student.create(data);
       req.flash('success', 'Student created successfully');
       res.redirect('/admin/students');
     } catch (error) {
@@ -136,7 +139,10 @@ const studentController = {
 
   async postUpdate(req, res) {
     try {
-      await Student.update(req.params.id, req.body);
+      const data = { ...req.body };
+      data.course_id = data.course_id || null;
+      data.batch_id = data.batch_id || null;
+      await Student.update(req.params.id, data);
       req.flash('success', 'Student updated successfully');
       res.redirect(`/admin/students/${req.params.id}`);
     } catch (error) {

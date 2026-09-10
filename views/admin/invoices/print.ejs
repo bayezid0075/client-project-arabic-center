@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice - <%= invoice.invoice_number %></title>
+  <title>Invoice - <%= invoice.invoice_number %> | Arabic Technical Training Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,8 +25,10 @@
       padding-bottom: 1.5rem;
       border-bottom: 2px solid #111;
     }
-    .invoice-logo { font-size: 1.5rem; font-weight: 700; }
+    .invoice-logo { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
     .invoice-logo span { color: #E85D04; }
+    .invoice-logo-img { height: 50px; width: auto; object-fit: contain; }
+    .invoice-logo-text { font-size: 1rem; font-weight: 700; }
     .invoice-center-info { font-size: 0.75rem; color: #666; margin-top: 0.25rem; }
     .invoice-title { text-align: right; }
     .invoice-title h1 { font-size: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
@@ -136,7 +138,10 @@
   <div class="invoice">
     <div class="invoice-header">
       <div>
-        <div class="invoice-logo">&#9632; TRAINING <span>CENTER</span></div>
+        <div class="invoice-logo">
+          <img src="/images/logo.png" alt="Arabic Technical Training Center Logo" class="invoice-logo-img">
+          <span class="invoice-logo-text">Arabic Technical Training Center</span>
+        </div>
         <div class="invoice-center-info">
           123 Training Street, Education District<br>
           Dhaka, Bangladesh<br>
@@ -230,7 +235,7 @@
 
     <div class="invoice-footer">
       <span>Thank you for your business!</span>
-      <span>Training Center | <%= invoice.invoice_number %></span>
+      <span>Arabic Technical Training Center | <%= invoice.invoice_number %></span>
     </div>
   </div>
 </body>

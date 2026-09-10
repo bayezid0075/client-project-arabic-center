@@ -14,61 +14,35 @@
       <p>Choose from our comprehensive range of professional training programs.</p>
     </div>
 
+    <% if (typeof courses !== 'undefined' && courses && courses.length > 0) { %>
     <div class="courses-grid">
+      <% courses.forEach(function(course) { %>
       <div class="course-card">
-        <span class="course-code">WEB101</span>
-        <h3>Web Development</h3>
-        <p>Comprehensive full-stack web development program covering HTML, CSS, JavaScript, Node.js, and databases.</p>
+        <span class="course-code"><%= course.code %></span>
+        <h3><%= course.name %></h3>
+        <p><%= course.description ? course.description.substring(0, 120) + '...' : '' %></p>
         <div class="course-meta">
-          <span class="duration">6 Months</span>
-          <span class="fee">&#2547; 45,000</span>
+          <span class="duration"><%= course.duration || 'N/A' %></span>
+          <span class="fee">&#2547; <%= parseFloat(course.fee).toLocaleString() %></span>
         </div>
-      </div>
-      <div class="course-card">
-        <span class="course-code">GFX201</span>
-        <h3>Graphic Design</h3>
-        <p>Professional graphic design course covering Adobe Creative Suite, typography, and visual communication.</p>
-        <div class="course-meta">
-          <span class="duration">4 Months</span>
-          <span class="fee">&#2547; 35,000</span>
+        <% if (course.batches && course.batches.length > 0) { %>
+        <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.8rem;">
+          <strong>Available Batches:</strong>
+          <% course.batches.forEach(function(batch, i) { %>
+            <div style="color: var(--muted); margin-top: 0.25rem;">
+              <%= batch.name %>
+              <% if (batch.start_date) { %> - Starts <%= new Date(batch.start_date).toLocaleDateString() %><% } %>
+            </div>
+          <% }); %>
         </div>
+        <% } %>
       </div>
-      <div class="course-card">
-        <span class="course-code">DMK301</span>
-        <h3>Digital Marketing</h3>
-        <p>Complete digital marketing training including SEO, social media, PPC, and analytics.</p>
-        <div class="course-meta">
-          <span class="duration">3 Months</span>
-          <span class="fee">&#2547; 28,000</span>
-        </div>
-      </div>
-      <div class="course-card">
-        <span class="course-code">DSC401</span>
-        <h3>Data Science</h3>
-        <p>Data analysis, visualization, machine learning, and statistical modeling with Python.</p>
-        <div class="course-meta">
-          <span class="duration">6 Months</span>
-          <span class="fee">&#2547; 55,000</span>
-        </div>
-      </div>
-      <div class="course-card">
-        <span class="course-code">MAD501</span>
-        <h3>Mobile App Development</h3>
-        <p>Cross-platform mobile development using React Native and Flutter.</p>
-        <div class="course-meta">
-          <span class="duration">5 Months</span>
-          <span class="fee">&#2547; 42,000</span>
-        </div>
-      </div>
-      <div class="course-card">
-        <span class="course-code">NET601</span>
-        <h3>Network Administration</h3>
-        <p>Network setup, security, and administration with hands-on lab experience.</p>
-        <div class="course-meta">
-          <span class="duration">4 Months</span>
-          <span class="fee">&#2547; 38,000</span>
-        </div>
-      </div>
+      <% }); %>
     </div>
+    <% } else { %>
+    <div class="empty-state">
+      <p>Courses are being updated. Please check back later.</p>
+    </div>
+    <% } %>
   </div>
 </section>

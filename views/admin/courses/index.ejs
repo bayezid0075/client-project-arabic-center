@@ -1,0 +1,72 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ COURSE MANAGEMENT ]</span>
+    <h2>ALL COURSES</h2>
+  </div>
+  <a href="/admin/courses/create" class="btn btn--primary">+ ADD COURSE</a>
+</div>
+
+<form action="/admin/courses" method="GET" class="search-bar">
+  <input type="text" name="search" class="form-input" placeholder="Search by name, code, or description..." value="<%= search %>">
+  <button type="submit" class="btn btn--outline">SEARCH</button>
+  <% if (search) { %>
+    <a href="/admin/courses" class="btn btn--ghost">CLEAR</a>
+  <% } %>
+</form>
+
+<div class="admin-table-card">
+  <% if (courses && courses.length > 0) { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>CODE</th>
+          <th>NAME</th>
+          <th>BATCH</th>
+          <th>DURATION</th>
+          <th>FEE</th>
+          <th>STUDENTS</th>
+          <th>STATUS</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% courses.forEach(function(course) { %>
+        <tr>
+          <td class="mono"><%= course.code %></td>
+          <td><strong><%= course.name %></strong></td>
+          <td><%= course.batch_names || 'N/A' %></td>
+          <td><%= course.duration || 'N/A' %></td>
+          <td class="mono">&#2547; <%= parseFloat(course.fee).toLocaleString() %></td>
+          <td><%= course.student_count %></td>
+          <td><span class="badge badge--<%= course.is_active ? 'active' : 'inactive' %>"><%= course.is_active ? 'Active' : 'Inactive' %></span></td>
+          <td>
+            <div class="table-actions">
+              <a href="/admin/courses/<%= course.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+              <a href="/admin/courses/<%= course.id %>/edit" class="btn btn--ghost btn--sm">EDIT</a>
+            </div>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="label">[ NO DATA ]</span>
+    <h3>NO COURSES FOUND</h3>
+    <p><%= search ? 'No courses match your search criteria.' : 'No courses have been added yet.' %></p>
+    <% if (search) { %>
+      <a href="/admin/courses" class="btn btn--outline">CLEAR FILTERS</a>
+    <% } else { %>
+      <a href="/admin/courses/create" class="btn btn--primary">+ ADD COURSE</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../../partials/pagination') %>
+
+<p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+  Showing <%= courses ? courses.length : 0 %> of <%= total %> courses
+</p>

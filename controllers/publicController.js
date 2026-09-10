@@ -6,9 +6,14 @@ const publicController = {
   async getHome(req, res) {
     try {
       const courses = await Course.findActive();
+      const Batch = require('../models/Batch');
+      const coursesWithBatches = await Promise.all(courses.map(async (course) => {
+        const batches = await Batch.findByCourseId(course.id);
+        return { ...course, batches };
+      }));
       res.render('public/home', {
         title: 'Professional Training Center - Build Skills, Build Your Future',
-        courses,
+        courses: coursesWithBatches,
         page: 'home'
       });
     } catch (error) {
@@ -87,11 +92,27 @@ const publicController = {
     }
   },
 
-  getCourses(req, res) {
-    res.render('public/courses', {
-      title: 'Our Courses - Professional Training Center',
-      page: 'courses'
-    });
+  async getCourses(req, res) {
+    try {
+      const courses = await Course.findActive();
+      const Batch = require('../models/Batch');
+      const coursesWithBatches = await Promise.all(courses.map(async (course) => {
+        const batches = await Batch.findByCourseId(course.id);
+        return { ...course, batches };
+      }));
+      res.render('public/courses', {
+        title: 'Our Courses - Professional Training Center',
+        page: 'courses',
+        courses: coursesWithBatches
+      });
+    } catch (error) {
+      console.error('Courses page error:', error);
+      res.render('public/courses', {
+        title: 'Our Courses - Professional Training Center',
+        page: 'courses',
+        courses: []
+      });
+    }
   }
 };
 

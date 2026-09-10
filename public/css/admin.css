@@ -65,6 +65,13 @@
   color: var(--paper);
 }
 
+.sidebar-logo-img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .sidebar-close {
   display: none;
   align-items: center;
@@ -251,6 +258,26 @@
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.topbar-logo-img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.topbar-brand-name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink);
 }
 
 .topbar-user-name {
@@ -450,6 +477,10 @@
   .sidebar-toggle {
     display: flex;
   }
+
+  .sidebar-logo-img {
+    height: 28px;
+  }
 }
 
 /* Small mobile */
@@ -463,6 +494,10 @@
   }
 
   .topbar-user-name {
+    display: none;
+  }
+
+  .topbar-brand-name {
     display: none;
   }
 

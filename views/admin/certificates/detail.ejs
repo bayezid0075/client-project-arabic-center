@@ -38,10 +38,6 @@
         <span class="value"><%= certificate.course_name || 'N/A' %></span>
       </div>
       <div class="detail-item">
-        <span class="label">BATCH</span>
-        <span class="value"><%= certificate.batch_name || 'N/A' %></span>
-      </div>
-      <div class="detail-item">
         <span class="label">ISSUE DATE</span>
         <span class="value"><%= certificate.issue_date ? new Date(certificate.issue_date).toLocaleDateString() : 'N/A' %></span>
       </div>

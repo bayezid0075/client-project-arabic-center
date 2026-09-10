@@ -1,7 +1,6 @@
 const Certificate = require('../models/Certificate');
 const Student = require('../models/Student');
 const Course = require('../models/Course');
-const Batch = require('../models/Batch');
 
 const certificateController = {
   async getAll(req, res) {
@@ -36,17 +35,15 @@ const certificateController = {
 
   async getCreate(req, res) {
     try {
-      const [students, courses, batches] = await Promise.all([
+      const [students, courses] = await Promise.all([
         Student.findAll('', 500, 0),
-        Course.findActive(),
-        Batch.findActive()
+        Course.findActive()
       ]);
 
       res.render('admin/certificates/create', {
         title: 'Issue New Certificate',
         students,
         courses,
-        batches,
         pageName: 'certificates'
       });
     } catch (error) {
@@ -94,11 +91,10 @@ const certificateController = {
 
   async getEdit(req, res) {
     try {
-      const [certificate, students, courses, batches] = await Promise.all([
+      const [certificate, students, courses] = await Promise.all([
         Certificate.findById(req.params.id),
         Student.findAll('', 500, 0),
-        Course.findActive(),
-        Batch.findActive()
+        Course.findActive()
       ]);
 
       if (!certificate) {
@@ -111,7 +107,6 @@ const certificateController = {
         certificate,
         students,
         courses,
-        batches,
         pageName: 'certificates'
       });
     } catch (error) {
