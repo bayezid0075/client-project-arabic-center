@@ -150,8 +150,11 @@ const invoiceController = {
         return res.redirect('/admin/invoices');
       }
 
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+
       res.render('admin/invoices/print', {
         invoice,
+        baseUrl,
         layout: false
       });
     } catch (error) {

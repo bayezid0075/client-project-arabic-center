@@ -56,11 +56,16 @@
     .cert-meta-item .value { font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
     .cert-footer { display: flex; justify-content: space-between; width: 70%; margin-top: 1rem; }
     .cert-signature { text-align: center; }
+    .cert-sign-left{ position: absolute; left: 100px ;}
+    .cert-sign-right{ position: absolute; right: 100px ;}
     .cert-signature-line { width: 150px; border-top: 1px solid #111; margin-bottom: 0.25rem; }
     .cert-signature-name { font-size: 0.75rem; font-weight: 600; }
     .cert-signature-title { font-size: 0.65rem; color: #888; }
-    .cert-number { position: absolute; bottom: 15mm; right: 20mm; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: #aaa; }
-    .cert-verification { position: absolute; bottom: 15mm; left: 20mm; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: #aaa; }
+    .cert-number { position: absolute; bottom: 15mm; right: 20mm; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: #aaa; margin-bottom: 10px; }
+    .cert-verification { position: absolute; bottom: 15mm; left: 20mm; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: #aaa; margin-bottom: 10px; }
+    .cert-qr { position: absolute; top: 20mm; left: 20mm; text-align: center; }
+    .cert-qr img { width: 65px; height: 65px; }
+    .cert-qr-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.5rem; color: #aaa; text-align: center; margin-top: 2px; }
     .print-btn {
       position: fixed; top: 1rem; right: 1rem; z-index: 1000;
       padding: 0.5rem 1rem; background: #111; color: #fff; border: none;
@@ -113,12 +118,12 @@
       </div>
 
       <div class="cert-footer">
-        <div class="cert-signature">
+        <div class="cert-signature cert-sign-left">
           <div class="cert-signature-line"></div>
           <div class="cert-signature-name">Director</div>
           <div class="cert-signature-title">Arabic Technical Training Center</div>
         </div>
-        <div class="cert-signature">
+        <div class="cert-signature cert-sign-right">
           <div class="cert-signature-line"></div>
           <div class="cert-signature-name">Instructor</div>
           <div class="cert-signature-title"><%= certificate.course_name || 'Program' %></div>
@@ -128,6 +133,10 @@
 
     <div class="cert-number">Certificate No: <%= certificate.certificate_number %></div>
     <div class="cert-verification">Verification: <%= certificate.verification_code %></div>
+    <div class="cert-qr">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<%= encodeURIComponent(baseUrl + '/verify/' + certificate.verification_code) %>" alt="Scan to verify certificate">
+      <div class="cert-qr-label">SCAN TO VERIFY</div>
+    </div>
   </div>
 </body>
 </html>

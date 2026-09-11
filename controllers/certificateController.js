@@ -148,8 +148,11 @@ const certificateController = {
         return res.redirect('/admin/certificates');
       }
 
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+
       res.render('admin/certificates/print', {
         certificate,
+        baseUrl,
         layout: false
       });
     } catch (error) {

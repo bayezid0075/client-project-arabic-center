@@ -61,11 +61,35 @@ const publicController = {
 
   getVerify(req, res) {
     res.render('public/verify', {
-      title: 'Verify Certificate - Professional Training Center',
+      title: 'Verify Certificate - Arabic Technical Training Center',
       page: 'verify',
       certificate: null,
       searched: false
     });
+  },
+
+  async getVerifyByCode(req, res) {
+    try {
+      const { code } = req.params;
+
+      if (!code || code.trim().length < 3) {
+        req.flash('error', 'Invalid verification code');
+        return res.redirect('/verify');
+      }
+
+      const certificate = await Certificate.verify(code.trim());
+
+      res.render('public/verify', {
+        title: 'Verify Certificate - Arabic Technical Training Center',
+        page: 'verify',
+        certificate,
+        searched: true
+      });
+    } catch (error) {
+      console.error('Certificate verification error:', error);
+      req.flash('error', 'An error occurred during verification');
+      res.redirect('/verify');
+    }
   },
 
   async postVerify(req, res) {

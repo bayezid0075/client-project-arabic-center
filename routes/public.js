@@ -8,6 +8,7 @@ router.get('/courses', publicController.getCourses);
 router.get('/contact', publicController.getContact);
 router.post('/contact', publicController.postContact);
 router.get('/verify', publicController.getVerify);
+router.get('/verify/:code', publicController.getVerifyByCode);
 router.post('/verify', publicController.postVerify);
 
 module.exports = router;
