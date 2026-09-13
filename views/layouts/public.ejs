@@ -9,8 +9,68 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .notice-marquee-bar {
+      background: #1a1a2e;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+      z-index: 100;
+    }
+    .notice-marquee-track {
+      display: flex;
+      width: max-content;
+      animation: noticeMarqueeScroll 25s linear infinite;
+    }
+    .notice-marquee-bar:hover .notice-marquee-track {
+      animation-play-state: paused;
+    }
+    .notice-marquee-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      color: #fff;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .notice-marquee-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .notice-marquee-item .notice-pin {
+      color: #f59e0b;
+      margin-right: 8px;
+      font-size: 0.9rem;
+    }
+    .notice-marquee-item .notice-divider {
+      margin: 0 1.5rem;
+      color: rgba(255,255,255,0.3);
+    }
+    @keyframes noticeMarqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
 </head>
 <body>
+  <% if (typeof activeNotices !== 'undefined' && activeNotices && activeNotices.length > 0) { %>
+  <div class="notice-marquee-bar">
+    <div class="notice-marquee-track">
+      <% for (var r = 0; r < 2; r++) { %>
+        <% activeNotices.forEach(function(notice, idx) { %>
+          <a href="/notice/<%= notice.id %>" class="notice-marquee-item">
+            <% if (notice.is_pinned) { %><span class="notice-pin">&#128204;</span><% } %>
+            <strong><%= notice.title %></strong>:&nbsp;<%= notice.summary || 'Click to read more' %>
+          </a>
+        <% }); %>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
+
   <%- include('../partials/navbar') %>
 
   <%- include('../partials/flash') %>

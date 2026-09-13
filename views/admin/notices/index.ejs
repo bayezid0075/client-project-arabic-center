@@ -1,0 +1,68 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ NOTICE MANAGEMENT ]</span>
+    <h2>ALL NOTICES</h2>
+  </div>
+  <a href="/admin/notices/create" class="btn btn--primary">+ CREATE NOTICE</a>
+</div>
+
+<form action="/admin/notices" method="GET" class="search-bar">
+  <input type="text" name="search" class="form-input" placeholder="Search by title or summary..." value="<%= search %>">
+  <button type="submit" class="btn btn--outline">SEARCH</button>
+  <% if (search) { %>
+    <a href="/admin/notices" class="btn btn--ghost">CLEAR</a>
+  <% } %>
+</form>
+
+<div class="admin-table-card">
+  <% if (notices && notices.length > 0) { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+    <thead>
+      <tr>
+        <th>TITLE</th>
+        <th>SUMMARY</th>
+        <th>PINNED</th>
+        <th>STATUS</th>
+        <th>CREATED</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% notices.forEach(function(notice) { %>
+      <tr>
+        <td><strong><%= notice.title %></strong></td>
+        <td><%= notice.summary ? notice.summary.substring(0, 60) + (notice.summary.length > 60 ? '...' : '') : 'N/A' %></td>
+        <td><% if (notice.is_pinned) { %><span class="badge badge--high">PINNED</span><% } else { %>-<% } %></td>
+        <td><span class="badge badge--<%= notice.is_active ? 'active' : 'inactive' %>"><%= notice.is_active ? 'ACTIVE' : 'INACTIVE' %></span></td>
+        <td><%= notice.created_at ? new Date(notice.created_at).toLocaleDateString() : 'N/A' %></td>
+        <td>
+          <div class="table-actions">
+            <a href="/admin/notices/<%= notice.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+            <a href="/admin/notices/<%= notice.id %>/edit" class="btn btn--ghost btn--sm">EDIT</a>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="label">[ NO DATA ]</span>
+    <h3>NO NOTICES FOUND</h3>
+    <p><%= search ? 'No notices match your search criteria.' : 'No notices have been created yet.' %></p>
+    <% if (search) { %>
+      <a href="/admin/notices" class="btn btn--outline">CLEAR FILTERS</a>
+    <% } else { %>
+      <a href="/admin/notices/create" class="btn btn--primary">+ CREATE NOTICE</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../../partials/pagination') %>
+
+<p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+  Showing <%= notices ? notices.length : 0 %> of <%= total %> notices
+</p>

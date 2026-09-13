@@ -85,7 +85,6 @@
 <div class="tabs" style="margin-top: 1.5rem;">
   <button class="tab-btn active" data-tab="tab-certs">CERTIFICATES (<%= certificates.length %>)</button>
   <button class="tab-btn" data-tab="tab-invoices">INVOICES (<%= invoices.length %>)</button>
-  <button class="tab-btn" data-tab="tab-issues">ISSUES (<%= issues.length %>)</button>
 </div>
 
 <div id="tab-certs" class="tab-content active">
@@ -168,47 +167,6 @@
   <% } else { %>
   <div class="empty-state">
     <p>No invoices for this student.</p>
-  </div>
-  <% } %>
-</div>
-
-<div id="tab-issues" class="tab-content">
-  <% if (issues.length > 0) { %>
-  <div class="admin-table-card">
-    <div class="table-wrapper">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ISSUE #</th>
-            <th>SUBJECT</th>
-            <th>TYPE</th>
-            <th>PRIORITY</th>
-            <th>STATUS</th>
-            <th>ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% issues.forEach(function(issue) { %>
-          <tr>
-            <td class="mono"><%= issue.issue_id %></td>
-            <td><%= issue.subject %></td>
-            <td><%= issue.issue_type %></td>
-            <td><span class="badge badge--<%= issue.priority %>"><%= issue.priority %></span></td>
-            <td><span class="badge badge--<%= issue.status %>"><%= issue.status %></span></td>
-            <td>
-              <div class="table-actions">
-                <a href="/admin/issues/<%= issue.id %>" class="btn btn--ghost btn--sm">VIEW</a>
-              </div>
-            </td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <% } else { %>
-  <div class="empty-state">
-    <p>No issues reported for this student.</p>
   </div>
   <% } %>
 </div>

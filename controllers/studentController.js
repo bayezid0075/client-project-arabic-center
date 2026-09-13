@@ -3,7 +3,6 @@ const Course = require('../models/Course');
 const Batch = require('../models/Batch');
 const Certificate = require('../models/Certificate');
 const Invoice = require('../models/Invoice');
-const StudentIssue = require('../models/StudentIssue');
 
 const studentController = {
   async getAll(req, res) {
@@ -85,22 +84,19 @@ const studentController = {
         return res.redirect('/admin/students');
       }
 
-      const [certificates, invoices, issues] = await Promise.all([
+      const [certificates, invoices] = await Promise.all([
         Certificate.findAll(``, 50, 0),
-        Invoice.findAll(``, 50, 0),
-        StudentIssue.findAll(``, 50, 0)
+        Invoice.findAll(``, 50, 0)
       ]);
 
       const studentCerts = certificates.filter(c => c.student_id == req.params.id);
       const studentInvoices = invoices.filter(i => i.student_id == req.params.id);
-      const studentIssues = issues.filter(i => i.student_id == req.params.id);
 
       res.render('admin/students/detail', {
         title: `Student: ${student.full_name}`,
         student,
         certificates: studentCerts,
         invoices: studentInvoices,
-        issues: studentIssues,
         pageName: 'students'
       });
     } catch (error) {

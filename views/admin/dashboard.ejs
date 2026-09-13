@@ -14,11 +14,6 @@
     <div class="stat-value">&#2547; <%= parseFloat(invoiceStats.totalRevenue || 0).toLocaleString() %></div>
     <div class="stat-meta"><%= invoiceStats.total %> invoices</div>
   </div>
-  <div class="stat-card stat-card--red">
-    <span class="label">OPEN ISSUES</span>
-    <div class="stat-value"><%= issueStats.open %></div>
-    <div class="stat-meta"><%= issueStats.inProgress %> in progress</div>
-  </div>
 </div>
 
 <div class="dashboard-grid">
@@ -127,41 +122,6 @@
     <% } else { %>
     <div class="empty-state">
       <p>No invoices yet.</p>
-    </div>
-    <% } %>
-  </div>
-
-  <div class="admin-table-card">
-    <div class="card-header">
-      <h3>RECENT ISSUES</h3>
-      <a href="/admin/issues" class="btn btn--ghost btn--sm">VIEW ALL</a>
-    </div>
-    <% if (recentIssues && recentIssues.length > 0) { %>
-    <div class="table-wrapper">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ISSUE #</th>
-            <th>STUDENT</th>
-            <th>PRIORITY</th>
-            <th>STATUS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% recentIssues.forEach(function(issue) { %>
-          <tr>
-            <td class="mono"><%= issue.issue_id %></td>
-            <td><%= issue.student_name %></td>
-            <td><span class="badge badge--<%= issue.priority %>"><%= issue.priority %></span></td>
-            <td><span class="badge badge--<%= issue.status %>"><%= issue.status %></span></td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
-    </div>
-    <% } else { %>
-    <div class="empty-state">
-      <p>No issues yet.</p>
     </div>
     <% } %>
   </div>

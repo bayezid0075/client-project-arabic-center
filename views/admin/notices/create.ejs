@@ -1,0 +1,46 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ NEW NOTICE ]</span>
+    <h2>CREATE NEW NOTICE</h2>
+  </div>
+  <a href="/admin/notices" class="btn btn--outline">&larr; BACK TO LIST</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/admin/notices" method="POST">
+      <div class="form-group">
+        <label class="form-label">Title *</label>
+        <input type="text" name="title" class="form-input" required placeholder="Notice title" maxlength="200">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Summary</label>
+        <input type="text" name="summary" class="form-input" placeholder="Brief summary for marquee display" maxlength="300">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Content</label>
+        <textarea name="content" class="form-textarea" rows="8" placeholder="Full notice content (supports plain text)"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Pin to Top</label>
+          <select name="is_pinned" class="form-select">
+            <option value="0">No</option>
+            <option value="1">Yes - Show first in marquee</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select name="is_active" class="form-select">
+            <option value="1">Active - Visible on website</option>
+            <option value="0">Inactive - Hidden from website</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn--primary">CREATE NOTICE</button>
+        <a href="/admin/notices" class="btn btn--outline">CANCEL</a>
+      </div>
+    </form>
+  </div>
+</div>

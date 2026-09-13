@@ -4,75 +4,318 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Certificate - <%= certificate.certificate_number %> | Arabic Technical Training Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Space Grotesk', sans-serif; background: #f0f0f0; }
+    body { font-family: 'Cormorant Garamond', serif; background: #f0f0f0; }
     @page { size: A4 landscape; margin: 0; }
+
     .certificate {
       width: 297mm;
       height: 210mm;
       margin: 0 auto;
-      background: #fff;
+      background: #fffdf7;
       position: relative;
-      padding: 20mm;
+      padding: 12mm;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
-    .cert-border {
+
+    /* Watermark PNG backgrounds */
+    .cert-bg-wave {
       position: absolute;
-      top: 10mm;
-      left: 10mm;
-      right: 10mm;
-      bottom: 10mm;
-      border: 2px solid #111;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.12;
     }
+    .cert-bg-wave.wave-top-left {
+      top: -30px;
+      left: -30px;
+      width: 320px;
+      height: auto;
+      transform: rotate(-15deg);
+    }
+    .cert-bg-wave.wave-bottom-right {
+      bottom: -30px;
+      right: -30px;
+      width: 320px;
+      height: auto;
+      transform: rotate(165deg) scaleX(-1);
+    }
+
+    /* Logo watermark - center */
+    .cert-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 260px;
+      height: 260px;
+      object-fit: contain;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Classic double border */
+    .cert-border-outer {
+      position: absolute;
+      top: 8mm;
+      left: 8mm;
+      right: 8mm;
+      bottom: 8mm;
+      border: 3px solid #8B6914;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .cert-border-inner {
+      position: absolute;
+      top: 11mm;
+      left: 11mm;
+      right: 11mm;
+      bottom: 11mm;
+      border: 1px solid #8B6914;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Classic ornamental corners */
     .cert-corner {
       position: absolute;
-      width: 30px;
-      height: 30px;
-      border: 2px solid #E85D04;
+      width: 50px;
+      height: 50px;
+      pointer-events: none;
+      z-index: 2;
     }
-    .cert-corner.tl { top: 15mm; left: 15mm; border-right: none; border-bottom: none; }
-    .cert-corner.tr { top: 15mm; right: 15mm; border-left: none; border-bottom: none; }
-    .cert-corner.bl { bottom: 15mm; left: 15mm; border-right: none; border-top: none; }
-    .cert-corner.br { bottom: 15mm; right: 15mm; border-left: none; border-top: none; }
-    .cert-content { text-align: center; position: relative; z-index: 1; }
-    .cert-logo { font-size: 2rem; color: #111; margin-bottom: 0.5rem; }
-    .cert-logo span { color: #E85D04; }
-    .cert-logo-img { height: 80px; width: auto; object-fit: contain; margin-bottom: 0.5rem; }
-    .cert-center-name { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
-    .cert-title { font-size: 2.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; color: #111; }
-    .cert-subtitle { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; font-style: italic; }
-    .cert-presents { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.2em; color: #888; margin-bottom: 0.5rem; }
-    .cert-student-name { font-size: 2.2rem; font-weight: 700; color: #111; margin-bottom: 0.5rem; border-bottom: 2px solid #E85D04; display: inline-block; padding-bottom: 0.25rem; }
-    .cert-for { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.2em; color: #888; margin-bottom: 0.5rem; margin-top: 1rem; }
-    .cert-course { font-size: 1.5rem; font-weight: 600; color: #2455A4; margin-bottom: 1.5rem; }
-    .cert-meta { display: flex; justify-content: center; gap: 3rem; margin-bottom: 1.5rem; font-size: 0.8rem; }
+    .cert-corner::before,
+    .cert-corner::after {
+      content: '';
+      position: absolute;
+      background: #8B6914;
+    }
+    .cert-corner.tl { top: 9mm; left: 9mm; }
+    .cert-corner.tl::before { top: 0; left: 0; width: 50px; height: 2px; }
+    .cert-corner.tl::after { top: 0; left: 0; width: 2px; height: 50px; }
+
+    .cert-corner.tr { top: 9mm; right: 9mm; }
+    .cert-corner.tr::before { top: 0; right: 0; width: 50px; height: 2px; }
+    .cert-corner.tr::after { top: 0; right: 0; width: 2px; height: 50px; }
+
+    .cert-corner.bl { bottom: 9mm; left: 9mm; }
+    .cert-corner.bl::before { bottom: 0; left: 0; width: 50px; height: 2px; }
+    .cert-corner.bl::after { bottom: 0; left: 0; width: 2px; height: 50px; }
+
+    .cert-corner.br { bottom: 9mm; right: 9mm; }
+    .cert-corner.br::before { bottom: 0; right: 0; width: 50px; height: 2px; }
+    .cert-corner.br::after { bottom: 0; right: 0; width: 2px; height: 50px; }
+
+    /* Corner ornaments (diamond shapes) */
+    .cert-ornament {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #8B6914;
+      transform: rotate(45deg);
+      z-index: 2;
+    }
+    .cert-ornament.orn-tl { top: 13mm; left: 13mm; }
+    .cert-ornament.orn-tr { top: 13mm; right: 13mm; }
+    .cert-ornament.orn-bl { bottom: 13mm; left: 13mm; }
+    .cert-ornament.orn-br { bottom: 13mm; right: 13mm; }
+
+    /* Horizontal decorative lines */
+    .cert-deco-line {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #8B6914 20%, #8B6914 80%, transparent 100%);
+      z-index: 1;
+    }
+    .cert-deco-line.top { top: 28mm; width: 60%; }
+    .cert-deco-line.bottom { bottom: 28mm; width: 60%; }
+
+    /* Content */
+    .cert-content {
+      text-align: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    .cert-logo-img {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      margin-bottom: 0.3rem;
+    }
+
+    .cert-center-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #5a4a1f;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Classic title using Playfair Display italic */
+    .cert-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 2.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #3a2a0f;
+      margin-bottom: 0.3rem;
+      line-height: 1.1;
+    }
+
+    .cert-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: #6b5a2f;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .cert-presents {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: #999;
+      margin-bottom: 0.5rem;
+    }
+
+    .cert-student-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2a1a0f;
+      margin-bottom: 0.3rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1.5px solid #8B6914;
+      display: inline-block;
+      min-width: 300px;
+    }
+
+    .cert-for {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: #999;
+      margin-bottom: 0.4rem;
+      margin-top: 0.8rem;
+    }
+
+    .cert-course {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #5a4a1f;
+      margin-bottom: 1.2rem;
+      font-style: italic;
+    }
+
+    .cert-meta {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin-bottom: 1.2rem;
+      font-size: 0.8rem;
+    }
     .cert-meta-item { text-align: center; }
-    .cert-meta-item .label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: #888; margin-bottom: 0.25rem; font-family: 'IBM Plex Mono', monospace; }
-    .cert-meta-item .value { font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
-    .cert-footer { display: flex; justify-content: space-between; width: 70%; margin-top: 1rem; }
+    .cert-meta-item .label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #aaa;
+      margin-bottom: 0.2rem;
+    }
+    .cert-meta-item .value {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #3a2a0f;
+    }
+
+    .cert-footer {
+      display: flex;
+      justify-content: space-between;
+      width: 65%;
+      margin-top: 0.5rem;
+    }
     .cert-signature { text-align: center; }
-    .cert-sign-left{ position: absolute; left: 100px ;}
-    .cert-sign-right{ position: absolute; right: 100px ;}
-    .cert-signature-line { width: 150px; border-top: 1px solid #111; margin-bottom: 0.25rem; }
-    .cert-signature-name { font-size: 0.75rem; font-weight: 600; }
-    .cert-signature-title { font-size: 0.65rem; color: #888; }
-    .cert-number { position: absolute; bottom: 15mm; right: 20mm; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: #aaa; margin-bottom: 10px; }
-    .cert-verification { position: absolute; bottom: 15mm; left: 20mm; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: #aaa; margin-bottom: 10px; }
-    .cert-qr { position: absolute; top: 20mm; left: 20mm; text-align: center; }
-    .cert-qr img { width: 65px; height: 65px; }
-    .cert-qr-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.5rem; color: #aaa; text-align: center; margin-top: 2px; }
+    .cert-sign-left { position: absolute; left: 100px; }
+    .cert-sign-right { position: absolute; right: 100px; }
+    .cert-signature-line {
+      width: 140px;
+      border-top: 1px solid #8B6914;
+      margin-bottom: 0.3rem;
+    }
+    .cert-signature-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #3a2a0f;
+    }
+    .cert-signature-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem;
+      color: #999;
+      font-style: italic;
+    }
+
+    .cert-number {
+      position: absolute;
+      bottom: 15mm;
+      right: 20mm;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: #bbb;
+      z-index: 3;
+    }
+    .cert-verification {
+      position: absolute;
+      bottom: 15mm;
+      left: 20mm;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: #bbb;
+      z-index: 3;
+    }
+    .cert-qr {
+      position: absolute;
+      top: 20mm;
+      left: 20mm;
+      text-align: center;
+      z-index: 3;
+    }
+    .cert-qr img { width: 55px; height: 55px; }
+    .cert-qr-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.45rem;
+      color: #ccc;
+      text-align: center;
+      margin-top: 2px;
+    }
+
     .print-btn {
       position: fixed; top: 1rem; right: 1rem; z-index: 1000;
-      padding: 0.5rem 1rem; background: #111; color: #fff; border: none;
-      font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600;
-      cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 0.5rem 1rem; background: #5a4a1f; color: #fff; border: none;
+      font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em;
     }
-    .print-btn:hover { background: #E85D04; }
+    .print-btn:hover { background: #8B6914; }
+
     @media print {
       .print-btn { display: none; }
       body { background: white; }
@@ -84,17 +327,38 @@
   <button class="print-btn" onclick="window.print()">PRINT CERTIFICATE</button>
 
   <div class="certificate">
-    <div class="cert-border"></div>
+    <!-- Background watermark PNGs -->
+    <img src="/images/wave-gradient.png" alt="" class="cert-bg-wave wave-top-left">
+    <img src="/images/wave-colorful.png" alt="" class="cert-bg-wave wave-bottom-right">
+
+    <!-- Logo watermark - center -->
+    <img src="/images/logo.png" alt="" class="cert-watermark">
+
+    <!-- Classic borders -->
+    <div class="cert-border-outer"></div>
+    <div class="cert-border-inner"></div>
+
+    <!-- Corner lines -->
     <div class="cert-corner tl"></div>
     <div class="cert-corner tr"></div>
     <div class="cert-corner bl"></div>
     <div class="cert-corner br"></div>
 
+    <!-- Corner ornaments -->
+    <div class="cert-ornament orn-tl"></div>
+    <div class="cert-ornament orn-tr"></div>
+    <div class="cert-ornament orn-bl"></div>
+    <div class="cert-ornament orn-br"></div>
+
+    <!-- Decorative horizontal lines -->
+    <div class="cert-deco-line top"></div>
+    <div class="cert-deco-line bottom"></div>
+
     <div class="cert-content">
       <img src="/images/logo.png" alt="Arabic Technical Training Center Logo" class="cert-logo-img">
       <div class="cert-center-name">Arabic Technical Training Center</div>
 
-      <div class="cert-title">CERTIFICATE OF COMPLETION</div>
+      <div class="cert-title">Certificate of Completion</div>
       <div class="cert-subtitle">This certificate is proudly presented to</div>
 
       <div class="cert-student-name"><%= certificate.student_name %></div>

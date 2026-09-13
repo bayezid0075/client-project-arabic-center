@@ -58,25 +58,6 @@ function validateCertificate(req, res, next) {
   next();
 }
 
-function validateIssue(req, res, next) {
-  const errors = [];
-  const { subject, student_id } = req.body;
-
-  if (!student_id) {
-    errors.push('Student is required');
-  }
-
-  if (!subject || subject.trim().length < 3) {
-    errors.push('Subject is required (min 3 characters)');
-  }
-
-  if (errors.length > 0) {
-    errors.forEach(err => req.flash('error', err));
-    return res.redirect('back');
-  }
-  next();
-}
-
 function validateCourse(req, res, next) {
   const errors = [];
   const { name, code, batch_name } = req.body;
@@ -108,4 +89,4 @@ function validateCourse(req, res, next) {
   next();
 }
 
-module.exports = { validateStudent, validateInvoice, validateCertificate, validateIssue, validateCourse };
+module.exports = { validateStudent, validateInvoice, validateCertificate, validateCourse };

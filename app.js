@@ -55,7 +55,9 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.set('layout', 'layouts/public');
 
-app.use((req, res, next) => {
+const Notice = require('./models/Notice');
+
+app.use(async (req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.userId = req.session.userId;
@@ -67,6 +69,12 @@ app.use((req, res, next) => {
     res.locals.layout = 'layouts/admin';
   } else {
     res.locals.layout = 'layouts/public';
+    try {
+      const activeNotices = await Notice.findActive();
+      res.locals.activeNotices = activeNotices;
+    } catch (e) {
+      res.locals.activeNotices = [];
+    }
   }
 
   next();
@@ -78,7 +86,7 @@ const courseRoutes = require('./routes/courses');
 const studentRoutes = require('./routes/students');
 const certificateRoutes = require('./routes/certificates');
 const invoiceRoutes = require('./routes/invoices');
-const issueRoutes = require('./routes/issues');
+const noticeRoutes = require('./routes/notices');
 const dashboardController = require('./controllers/dashboardController');
 const { requireAuth } = require('./middleware/auth');
 
@@ -92,7 +100,7 @@ app.use('/admin/students', requireAuth, studentRoutes);
 app.use('/admin/courses', requireAuth, courseRoutes);
 app.use('/admin/certificates', requireAuth, certificateRoutes);
 app.use('/admin/invoices', requireAuth, invoiceRoutes);
-app.use('/admin/issues', requireAuth, issueRoutes);
+app.use('/admin/notices', requireAuth, noticeRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
