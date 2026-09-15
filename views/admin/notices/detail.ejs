@@ -35,6 +35,10 @@
         <span class="label">LAST UPDATED</span>
         <span class="value"><%= notice.updated_at ? new Date(notice.updated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A' %></span>
       </div>
+      <div class="detail-item">
+        <span class="label">LINK</span>
+        <span class="value"><% if (notice.link) { %><a href="<%= notice.link %>" target="_blank" style="color: var(--primary);"><%= notice.link %></a><% } else { %>No link set<% } %></span>
+      </div>
     </div>
   </div>
 </div>

@@ -22,6 +22,7 @@
       <tr>
         <th>TITLE</th>
         <th>SUMMARY</th>
+        <th>LINK</th>
         <th>PINNED</th>
         <th>STATUS</th>
         <th>CREATED</th>
@@ -33,6 +34,7 @@
       <tr>
         <td><strong><%= notice.title %></strong></td>
         <td><%= notice.summary ? notice.summary.substring(0, 60) + (notice.summary.length > 60 ? '...' : '') : 'N/A' %></td>
+        <td><% if (notice.link) { %><a href="<%= notice.link %>" target="_blank" style="color: var(--primary);">&#128279; YES</a><% } else { %>-<% } %></td>
         <td><% if (notice.is_pinned) { %><span class="badge badge--high">PINNED</span><% } else { %>-<% } %></td>
         <td><span class="badge badge--<%= notice.is_active ? 'active' : 'inactive' %>"><%= notice.is_active ? 'ACTIVE' : 'INACTIVE' %></span></td>
         <td><%= notice.created_at ? new Date(notice.created_at).toLocaleDateString() : 'N/A' %></td>

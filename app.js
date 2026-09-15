@@ -10,7 +10,7 @@ const methodOverride = require('method-override');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 
-const { testConnection } = require('./config/database');
+const { testConnection, pool } = require('./config/database');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -87,6 +87,7 @@ const studentRoutes = require('./routes/students');
 const certificateRoutes = require('./routes/certificates');
 const invoiceRoutes = require('./routes/invoices');
 const noticeRoutes = require('./routes/notices');
+const eventRoutes = require('./routes/events');
 const dashboardController = require('./controllers/dashboardController');
 const { requireAuth } = require('./middleware/auth');
 
@@ -101,6 +102,7 @@ app.use('/admin/courses', requireAuth, courseRoutes);
 app.use('/admin/certificates', requireAuth, certificateRoutes);
 app.use('/admin/invoices', requireAuth, invoiceRoutes);
 app.use('/admin/notices', requireAuth, noticeRoutes);
+app.use('/admin/events', requireAuth, eventRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -111,6 +113,16 @@ async function start() {
     console.error('[APP] Failed to connect to database. Please check your database configuration.');
     console.error('[APP] Make sure MySQL is running and .env is configured correctly.');
     process.exit(1);
+  }
+
+  try {
+    const [cols] = await pool.query("SHOW COLUMNS FROM notices LIKE 'link'");
+    if (cols.length === 0) {
+      await pool.query("ALTER TABLE notices ADD COLUMN link VARCHAR(500) DEFAULT NULL AFTER content");
+      console.log('[APP] Added link column to notices table');
+    }
+  } catch (e) {
+    console.error('[APP] Migration warning:', e.message);
   }
 
   app.listen(PORT, () => {

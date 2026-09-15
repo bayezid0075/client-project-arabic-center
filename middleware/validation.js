@@ -89,4 +89,27 @@ function validateCourse(req, res, next) {
   next();
 }
 
-module.exports = { validateStudent, validateInvoice, validateCertificate, validateCourse };
+function validateEvent(req, res, next) {
+  const errors = [];
+  const { title, event_date } = req.body;
+
+  if (!title || title.trim().length < 2) {
+    errors.push('Event title is required (min 2 characters)');
+  }
+
+  if (!event_date) {
+    errors.push('Event date is required');
+  }
+
+  if (req.body.end_date && event_date && new Date(req.body.end_date) < new Date(event_date)) {
+    errors.push('End date cannot be before the start date');
+  }
+
+  if (errors.length > 0) {
+    errors.forEach(err => req.flash('error', err));
+    return res.redirect('back');
+  }
+  next();
+}
+
+module.exports = { validateStudent, validateInvoice, validateCertificate, validateCourse, validateEvent };

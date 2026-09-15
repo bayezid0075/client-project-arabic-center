@@ -1,0 +1,94 @@
+<section class="page-hero">
+  <div class="container">
+    <a href="/events" class="label" style="display: inline-block; margin-bottom: 0.75rem; text-decoration: none; color: var(--orange);">&larr; ALL EVENTS</a>
+    <h1><%= event.title %></h1>
+    <div class="event-detail-hero-meta">
+      <span class="event-detail-meta-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        <%= new Date(event.event_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+      </span>
+      <% if (event.event_time) { %>
+      <span class="event-detail-meta-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <%= event.event_time %><% if (event.end_time) { %> - <%= event.end_time %><% } %>
+      </span>
+      <% } %>
+      <% if (event.location) { %>
+      <span class="event-detail-meta-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <%= event.location %>
+      </span>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="event-detail-layout">
+      <div class="event-detail-main">
+        <% if (event.image) { %>
+        <div class="event-detail-image">
+          <img src="<%= event.image %>" alt="<%= event.title %>">
+        </div>
+        <% } %>
+
+        <div class="event-detail-content">
+          <% if (event.summary) { %>
+          <p class="event-detail-summary"><%= event.summary %></p>
+          <% } %>
+
+          <% if (event.content) { %>
+          <div class="event-detail-body">
+            <%- event.content.replace(/\n/g, '<br>') %>
+          </div>
+          <% } else { %>
+          <p style="color: var(--muted);">No additional details provided for this event.</p>
+          <% } %>
+        </div>
+
+        <% if (event.end_date && event.end_date !== event.event_date) { %>
+        <div class="event-detail-dates">
+          <div class="event-detail-date-block">
+            <span class="label">START DATE</span>
+            <span class="value"><%= new Date(event.event_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+          </div>
+          <div class="event-detail-date-block">
+            <span class="label">END DATE</span>
+            <span class="value"><%= new Date(event.end_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="event-detail-sidebar">
+        <div class="event-detail-info-card">
+          <h4>Event Details</h4>
+          <div class="event-detail-info-list">
+            <div class="event-detail-info-item">
+              <span class="label">DATE</span>
+              <span class="value"><%= new Date(event.event_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+            </div>
+            <% if (event.event_time) { %>
+            <div class="event-detail-info-item">
+              <span class="label">TIME</span>
+              <span class="value mono"><%= event.event_time %><% if (event.end_time) { %> - <%= event.end_time %><% } %></span>
+            </div>
+            <% } %>
+            <% if (event.location) { %>
+            <div class="event-detail-info-item">
+              <span class="label">LOCATION</span>
+              <span class="value"><%= event.location %></span>
+            </div>
+            <% } %>
+          </div>
+          <% if (event.registration_link) { %>
+          <a href="<%= event.registration_link %>" target="_blank" class="btn btn--primary" style="width: 100%; margin-top: 1rem; text-align: center;">REGISTER NOW</a>
+          <% } %>
+        </div>
+
+        <a href="/events" class="btn btn--outline" style="width: 100%; margin-top: 1rem; text-align: center;">&larr; ALL EVENTS</a>
+      </div>
+    </div>
+  </div>
+</section>

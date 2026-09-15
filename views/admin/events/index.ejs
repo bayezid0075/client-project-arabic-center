@@ -1,0 +1,76 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ EVENT MANAGEMENT ]</span>
+    <h2>ALL EVENTS</h2>
+  </div>
+  <a href="/admin/events/create" class="btn btn--primary">+ CREATE EVENT</a>
+</div>
+
+<form action="/admin/events" method="GET" class="search-bar">
+  <input type="text" name="search" class="form-input" placeholder="Search by title, summary, or location..." value="<%= search %>">
+  <button type="submit" class="btn btn--outline">SEARCH</button>
+  <% if (search) { %>
+    <a href="/admin/events" class="btn btn--ghost">CLEAR</a>
+  <% } %>
+</form>
+
+<div class="admin-table-card">
+  <% if (events && events.length > 0) { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>IMAGE</th>
+          <th>TITLE</th>
+          <th>DATE</th>
+          <th>LOCATION</th>
+          <th>FEATURED</th>
+          <th>STATUS</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% events.forEach(function(ev) { %>
+        <tr>
+          <td>
+            <% if (ev.image) { %>
+              <img src="<%= ev.image %>" alt="" style="width: 48px; height: 36px; object-fit: cover; border-radius: var(--radius-sm);">
+            <% } else { %>
+              <div style="width: 48px; height: 36px; background: var(--cream); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: var(--muted);">N/A</div>
+            <% } %>
+          </td>
+          <td><strong><%= ev.title %></strong></td>
+          <td class="mono" style="white-space: nowrap;"><%= new Date(ev.event_date).toLocaleDateString() %></td>
+          <td><%= ev.location || 'N/A' %></td>
+          <td><% if (ev.is_featured) { %><span class="badge badge--high">FEATURED</span><% } else { %>-<% } %></td>
+          <td><span class="badge badge--<%= ev.is_active ? 'active' : 'inactive' %>"><%= ev.is_active ? 'ACTIVE' : 'INACTIVE' %></span></td>
+          <td>
+            <div class="table-actions">
+              <a href="/admin/events/<%= ev.id %>" class="btn btn--ghost btn--sm">VIEW</a>
+              <a href="/admin/events/<%= ev.id %>/edit" class="btn btn--ghost btn--sm">EDIT</a>
+            </div>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="label">[ NO DATA ]</span>
+    <h3>NO EVENTS FOUND</h3>
+    <p><%= search ? 'No events match your search criteria.' : 'No events have been created yet.' %></p>
+    <% if (search) { %>
+      <a href="/admin/events" class="btn btn--outline">CLEAR FILTERS</a>
+    <% } else { %>
+      <a href="/admin/events/create" class="btn btn--primary">+ CREATE EVENT</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../../partials/pagination') %>
+
+<p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+  Showing <%= events ? events.length : 0 %> of <%= total %> events
+</p>

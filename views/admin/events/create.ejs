@@ -1,0 +1,107 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ NEW EVENT ]</span>
+    <h2>CREATE NEW EVENT</h2>
+  </div>
+  <a href="/admin/events" class="btn btn--outline">&larr; BACK TO LIST</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/admin/events" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label class="form-label">Event Title *</label>
+        <input type="text" name="title" class="form-input" required placeholder="e.g. Annual Tech Summit 2026" maxlength="200">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Short Summary</label>
+        <input type="text" name="summary" class="form-input" placeholder="Brief summary for listings (max 500 chars)" maxlength="500">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Full Description</label>
+        <textarea name="content" class="form-textarea" rows="8" placeholder="Detailed event description..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Event Image</label>
+        <input type="file" name="image" class="form-input" accept="image/*" onchange="previewImage(this, 'imagePreview')">
+        <p class="form-hint">Max 5MB. Allowed: JPEG, PNG, GIF, WebP</p>
+        <div id="imagePreview" style="margin-top: 0.75rem; display: none;">
+          <img src="" alt="Preview" style="max-width: 300px; max-height: 200px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Event Date *</label>
+          <input type="date" name="event_date" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Start Time</label>
+          <input type="time" name="event_time" class="form-input">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">End Date</label>
+          <input type="date" name="end_date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Time</label>
+          <input type="time" name="end_time" class="form-input">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input type="text" name="location" class="form-input" placeholder="e.g. Main Campus, Room 301, or Online">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Registration Link</label>
+        <input type="url" name="registration_link" class="form-input" placeholder="https://...">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Featured</label>
+          <select name="is_featured" class="form-select">
+            <option value="0">No</option>
+            <option value="1">Yes - Show prominently on homepage</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select name="is_active" class="form-select">
+            <option value="1">Active - Visible on website</option>
+            <option value="0">Inactive - Hidden from website</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn--primary">CREATE EVENT</button>
+        <a href="/admin/events" class="btn btn--outline">CANCEL</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function previewImage(input, previewId) {
+  const preview = document.getElementById(previewId);
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.querySelector('img').src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    preview.style.display = 'none';
+  }
+}
+</script>

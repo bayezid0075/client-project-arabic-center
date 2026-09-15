@@ -1,0 +1,102 @@
+<div class="page-header">
+  <div>
+    <span class="label">[ EVENT RECORD ]</span>
+    <h2><%= event.title %></h2>
+  </div>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/admin/events/<%= event.id %>/edit" class="btn btn--outline">EDIT</a>
+    <a href="/admin/events" class="btn btn--ghost">&larr; BACK</a>
+  </div>
+</div>
+
+<div class="detail-card">
+  <div class="detail-card-header">
+    <h3>EVENT INFORMATION</h3>
+    <div style="display: flex; gap: 0.375rem;">
+      <% if (event.is_featured) { %><span class="badge badge--high">FEATURED</span><% } %>
+      <span class="badge badge--<%= event.is_active ? 'active' : 'inactive' %>"><%= event.is_active ? 'ACTIVE' : 'INACTIVE' %></span>
+    </div>
+  </div>
+  <div class="detail-card-body">
+    <% if (event.image) { %>
+    <div style="margin-bottom: 1.5rem;">
+      <img src="<%= event.image %>" alt="<%= event.title %>" style="max-width: 100%; max-height: 400px; border-radius: var(--radius-md); border: 1px solid var(--border-light); object-fit: contain;">
+    </div>
+    <% } %>
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">EVENT DATE</span>
+        <span class="value"><%= new Date(event.event_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+      </div>
+      <% if (event.event_time) { %>
+      <div class="detail-item">
+        <span class="label">START TIME</span>
+        <span class="value mono"><%= event.event_time %></span>
+      </div>
+      <% } %>
+      <% if (event.end_date) { %>
+      <div class="detail-item">
+        <span class="label">END DATE</span>
+        <span class="value"><%= new Date(event.end_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+      </div>
+      <% } %>
+      <% if (event.end_time) { %>
+      <div class="detail-item">
+        <span class="label">END TIME</span>
+        <span class="value mono"><%= event.end_time %></span>
+      </div>
+      <% } %>
+      <% if (event.location) { %>
+      <div class="detail-item">
+        <span class="label">LOCATION</span>
+        <span class="value"><%= event.location %></span>
+      </div>
+      <% } %>
+      <% if (event.registration_link) { %>
+      <div class="detail-item">
+        <span class="label">REGISTRATION</span>
+        <span class="value"><a href="<%= event.registration_link %>" target="_blank" style="color: var(--blue); text-decoration: underline;">Open Link</a></span>
+      </div>
+      <% } %>
+      <% if (event.summary) { %>
+      <div class="detail-item" style="grid-column: 1 / -1;">
+        <span class="label">SUMMARY</span>
+        <span class="value"><%= event.summary %></span>
+      </div>
+      <% } %>
+      <% if (event.content) { %>
+      <div class="detail-item" style="grid-column: 1 / -1;">
+        <span class="label">FULL DESCRIPTION</span>
+        <div class="value" style="white-space: pre-wrap; line-height: 1.7;"><%= event.content %></div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<div class="detail-card" style="margin-top: 1.5rem;">
+  <div class="detail-card-header">
+    <h3>METADATA</h3>
+  </div>
+  <div class="detail-card-body">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">SLUG</span>
+        <span class="value mono"><%= event.slug %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">PUBLIC URL</span>
+        <span class="value"><a href="/events/<%= event.slug %>" target="_blank" style="color: var(--blue); text-decoration: underline;">/events/<%= event.slug %></a></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">CREATED</span>
+        <span class="value"><%= event.created_at ? new Date(event.created_at).toLocaleString() : 'N/A' %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label">LAST UPDATED</span>
+        <span class="value"><%= event.updated_at ? new Date(event.updated_at).toLocaleString() : 'N/A' %></span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -44,16 +44,16 @@ class Notice {
 
   static async create(data) {
     const [result] = await pool.query(
-      'INSERT INTO notices (title, summary, content, is_pinned, is_active) VALUES (?, ?, ?, ?, ?)',
-      [data.title, data.summary || '', data.content || '', data.is_pinned ? 1 : 0, data.is_active !== false ? 1 : 0]
+      'INSERT INTO notices (title, summary, content, link, is_pinned, is_active) VALUES (?, ?, ?, ?, ?, ?)',
+      [data.title, data.summary || '', data.content || '', data.link || null, data.is_pinned ? 1 : 0, data.is_active !== false ? 1 : 0]
     );
     return result.insertId;
   }
 
   static async update(id, data) {
     await pool.query(
-      'UPDATE notices SET title = ?, summary = ?, content = ?, is_pinned = ?, is_active = ? WHERE id = ?',
-      [data.title, data.summary || '', data.content || '', data.is_pinned ? 1 : 0, data.is_active !== false ? 1 : 0, id]
+      'UPDATE notices SET title = ?, summary = ?, content = ?, link = ?, is_pinned = ?, is_active = ? WHERE id = ?',
+      [data.title, data.summary || '', data.content || '', data.link || null, data.is_pinned ? 1 : 0, data.is_active !== false ? 1 : 0, id]
     );
   }
 

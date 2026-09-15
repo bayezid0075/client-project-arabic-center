@@ -12,6 +12,24 @@ router.get('/verify', publicController.getVerify);
 router.get('/verify/:code', publicController.getVerifyByCode);
 router.post('/verify', publicController.postVerify);
 
+router.get('/events', async (req, res, next) => {
+  try {
+    const eventController = require('../controllers/eventController');
+    await eventController.getPublicList(req, res);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/events/:slug', async (req, res, next) => {
+  try {
+    const eventController = require('../controllers/eventController');
+    await eventController.getPublicDetail(req, res);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get('/notice/:id', async (req, res) => {
   try {
     const notice = await Notice.findById(req.params.id);

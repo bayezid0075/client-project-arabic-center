@@ -18,9 +18,13 @@
       <% } %>
 
       <% if (notice.content) { %>
-      <div style="color: var(--muted); line-height: 1.8; white-space: pre-wrap;"><%= notice.content %></div>
+      <div style="color: var(--muted); line-height: 1.8; white-space: pre-wrap; margin-bottom: 1.5rem;"><%= notice.content %></div>
       <% } else { %>
-      <p style="color: var(--muted);">No additional details available.</p>
+      <p style="color: var(--muted); margin-bottom: 1.5rem;">No additional details available.</p>
+      <% } %>
+
+      <% if (notice.link) { %>
+      <a href="<%= notice.link %>" target="_blank" class="btn btn--primary" style="display: inline-block;">Learn More &rarr;</a>
       <% } %>
     </div>
   </div>
