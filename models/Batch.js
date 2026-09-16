@@ -33,7 +33,12 @@ class Batch {
   }
 
   static async findByCourseId(courseId) {
-    const [rows] = await pool.query('SELECT * FROM batches WHERE course_id = ? AND is_active = 1', [courseId]);
+    const [rows] = await pool.query('SELECT * FROM batches WHERE course_id = ? ORDER BY created_at DESC', [courseId]);
+    return rows;
+  }
+
+  static async findActiveByCourseId(courseId) {
+    const [rows] = await pool.query('SELECT * FROM batches WHERE course_id = ? AND is_active = 1 ORDER BY name', [courseId]);
     return rows;
   }
 

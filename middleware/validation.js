@@ -60,7 +60,7 @@ function validateCertificate(req, res, next) {
 
 function validateCourse(req, res, next) {
   const errors = [];
-  const { name, code, batch_name } = req.body;
+  const { name, code, batches } = req.body;
 
   if (!name || name.trim().length < 2) {
     errors.push('Course name is required (min 2 characters)');
@@ -70,8 +70,14 @@ function validateCourse(req, res, next) {
     errors.push('Course code is required (min 2 characters)');
   }
 
-  if (!batch_name || batch_name.trim().length < 2) {
-    errors.push('Batch name is required (min 2 characters)');
+  if (batches && typeof batches === 'object') {
+    const batchKeys = Object.keys(batches);
+    for (const key of batchKeys) {
+      const b = batches[key];
+      if (b.name && b.name.trim().length < 2) {
+        errors.push('Batch name is required (min 2 characters)');
+      }
+    }
   }
 
   if (req.body.fee && parseFloat(req.body.fee) < 0) {

@@ -49,17 +49,30 @@ const courseController = {
     try {
       const courseId = await Course.create(req.body);
 
-      if (req.body.batch_name && req.body.batch_name.trim()) {
-        await Batch.create({
-          name: req.body.batch_name.trim(),
-          course_id: courseId,
-          start_date: req.body.start_date || null,
-          end_date: req.body.end_date || null,
-          max_students: req.body.max_students || 30
-        });
+      const batches = req.body.batches;
+      if (batches && typeof batches === 'object') {
+        const batchKeys = Object.keys(batches);
+        for (const key of batchKeys) {
+          const b = batches[key];
+          if (b.name && b.name.trim()) {
+            try {
+              await Batch.create({
+                name: b.name.trim(),
+                course_id: courseId,
+                start_date: b.start_date || null,
+                end_date: b.end_date || null,
+                max_students: b.max_students || 30
+              });
+            } catch (batchError) {
+              console.error('Batch create error:', batchError);
+              req.flash('error', `Error creating batch "${b.name}": ${batchError.message}`);
+              return res.redirect('/admin/courses/create');
+            }
+          }
+        }
       }
 
-      req.flash('success', 'Course and batch created successfully');
+      req.flash('success', 'Course and batches created successfully');
       res.redirect(`/admin/courses/${courseId}`);
     } catch (error) {
       console.error('Course create error:', error);
@@ -104,12 +117,11 @@ const courseController = {
       }
 
       const batches = await Batch.findByCourseId(req.params.id);
-      const batch = batches.length > 0 ? batches[0] : null;
 
       res.render('admin/courses/edit', {
         title: `Edit Course: ${course.name}`,
         course,
-        batch,
+        batches,
         pageName: 'courses'
       });
     } catch (error) {
@@ -123,23 +135,53 @@ const courseController = {
     try {
       await Course.update(req.params.id, req.body);
 
-      const batches = await Batch.findByCourseId(req.params.id);
-      const existingBatch = batches.length > 0 ? batches[0] : null;
+      const batches = req.body.batches;
+      const submittedIds = [];
 
-      if (req.body.batch_name && req.body.batch_name.trim()) {
-        const batchData = {
-          name: req.body.batch_name.trim(),
-          course_id: req.params.id,
-          start_date: req.body.start_date || null,
-          end_date: req.body.end_date || null,
-          max_students: req.body.max_students || 30,
-          is_active: 1
-        };
+      if (batches && typeof batches === 'object') {
+        const batchKeys = Object.keys(batches);
+        for (const key of batchKeys) {
+          const b = batches[key];
+          if (b.name && b.name.trim()) {
+            try {
+              if (b.id) {
+                const batchId = parseInt(b.id, 10);
+                submittedIds.push(batchId);
+                await Batch.update(batchId, {
+                  name: b.name.trim(),
+                  course_id: req.params.id,
+                  start_date: b.start_date || null,
+                  end_date: b.end_date || null,
+                  max_students: b.max_students || 30,
+                  is_active: b.is_active !== undefined ? (b.is_active === '1' || b.is_active === 1 ? 1 : 0) : 1
+                });
+              } else {
+                const newId = await Batch.create({
+                  name: b.name.trim(),
+                  course_id: req.params.id,
+                  start_date: b.start_date || null,
+                  end_date: b.end_date || null,
+                  max_students: b.max_students || 30
+                });
+                submittedIds.push(newId);
+              }
+            } catch (batchError) {
+              console.error('Batch update error:', batchError);
+              req.flash('error', `Error updating batch "${b.name}": ${batchError.message}`);
+              return res.redirect(`/admin/courses/${req.params.id}/edit`);
+            }
+          }
+        }
+      }
 
-        if (existingBatch) {
-          await Batch.update(existingBatch.id, batchData);
-        } else {
-          await Batch.create(batchData);
+      const existingBatches = await Batch.findByCourseId(req.params.id);
+      for (const existing of existingBatches) {
+        if (!submittedIds.includes(existing.id)) {
+          try {
+            await Batch.delete(existing.id);
+          } catch (deleteError) {
+            console.error('Batch delete error:', deleteError);
+          }
         }
       }
 

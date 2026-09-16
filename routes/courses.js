@@ -10,7 +10,7 @@ router.post('/', validateCourse, courseController.postCreate);
 
 router.get('/api/batches/:courseId', async (req, res) => {
   try {
-    const batches = await Batch.findByCourseId(req.params.courseId);
+    const batches = await Batch.findActiveByCourseId(req.params.courseId);
     res.json(batches);
   } catch (error) {
     console.error('Error fetching batches:', error);

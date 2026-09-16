@@ -40,30 +40,52 @@
           <option value="0" <%= !course.is_active ? 'selected' : '' %>>Inactive</option>
         </select>
       </div>
+
       <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-        <span class="label">[ BATCH INFORMATION ]</span>
-        <h3 style="margin: 0.5rem 0 1rem;">BATCH DETAILS</h3>
+        <span class="label">[ BATCHES ]</span>
+        <h3 style="margin: 0.5rem 0 1rem;">MANAGE BATCHES</h3>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Batch Name *</label>
-          <input type="text" name="batch_name" class="form-input" value="<%= batch ? batch.name : '' %>" required placeholder="e.g. Batch A, Morning Batch" maxlength="100">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Max Students</label>
-          <input type="number" name="max_students" class="form-input" min="1" value="<%= batch ? batch.max_students : 30 %>" placeholder="30">
-        </div>
+
+      <div id="batchContainer">
+        <% if (batches && batches.length > 0) { %>
+          <% batches.forEach(function(batch, i) { %>
+            <div class="batch-row" style="background: var(--card-bg); border: 1px solid var(--border); padding: 1rem; margin-bottom: 1rem; position: relative;">
+              <input type="hidden" name="batches[<%= i %>][id]" value="<%= batch.id %>">
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label class="form-label">Batch Name *</label>
+                  <input type="text" name="batches[<%= i %>][name]" class="form-input" value="<%= batch.name %>" required maxlength="100">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Students</label>
+                  <input type="number" name="batches[<%= i %>][max_students]" class="form-input" min="1" value="<%= batch.max_students %>">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Start Date</label>
+                  <input type="date" name="batches[<%= i %>][start_date]" class="form-input" value="<%= batch.start_date ? new Date(batch.start_date).toISOString().split('T')[0] : '' %>">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">End Date</label>
+                  <input type="date" name="batches[<%= i %>][end_date]" class="form-input" value="<%= batch.end_date ? new Date(batch.end_date).toISOString().split('T')[0] : '' %>">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Status</label>
+                  <select name="batches[<%= i %>][is_active]" class="form-select">
+                    <option value="1" <%= batch.is_active ? 'selected' : '' %>>Active</option>
+                    <option value="0" <%= !batch.is_active ? 'selected' : '' %>>Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" onclick="removeBatch(this, '<%= batch.id %>')" style="position: absolute; top: 0.5rem; right: 0.5rem; background: var(--red); color: white; border: none; padding: 0.25rem 0.5rem; cursor: pointer; font-size: 0.75rem;">&times; REMOVE</button>
+            </div>
+          <% }); %>
+        <% } %>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Start Date</label>
-          <input type="date" name="start_date" class="form-input" value="<%= batch && batch.start_date ? new Date(batch.start_date).toISOString().split('T')[0] : '' %>">
-        </div>
-        <div class="form-group">
-          <label class="form-label">End Date</label>
-          <input type="date" name="end_date" class="form-input" value="<%= batch && batch.end_date ? new Date(batch.end_date).toISOString().split('T')[0] : '' %>">
-        </div>
-      </div>
+
+      <button type="button" class="btn btn--outline" onclick="addBatch()" style="margin-bottom: 1rem;">+ ADD ANOTHER BATCH</button>
+
       <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
         <button type="submit" class="btn btn--primary">UPDATE COURSE</button>
         <a href="/admin/courses/<%= course.id %>" class="btn btn--outline">CANCEL</a>
@@ -77,3 +99,49 @@
     <button type="submit" class="btn btn--danger btn--sm">DELETE COURSE</button>
   </form>
 </div>
+
+<script>
+let batchIndex = <%= batches ? batches.length : 0 %>;
+
+function addBatch() {
+  const container = document.getElementById('batchContainer');
+  const html = `
+    <div class="batch-row" style="background: var(--card-bg); border: 1px solid var(--border); padding: 1rem; margin-bottom: 1rem; position: relative;">
+      <div class="form-row">
+        <div class="form-group" style="flex: 2;">
+          <label class="form-label">Batch Name *</label>
+          <input type="text" name="batches[${batchIndex}][name]" class="form-input" required placeholder="e.g. Batch A, Morning Batch" maxlength="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Students</label>
+          <input type="number" name="batches[${batchIndex}][max_students]" class="form-input" min="1" value="30" placeholder="30">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input type="date" name="batches[${batchIndex}][start_date]" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Date</label>
+          <input type="date" name="batches[${batchIndex}][end_date]" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select name="batches[${batchIndex}][is_active]" class="form-select">
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" onclick="removeBatch(this, '')" style="position: absolute; top: 0.5rem; right: 0.5rem; background: var(--red); color: white; border: none; padding: 0.25rem 0.5rem; cursor: pointer; font-size: 0.75rem;">&times; REMOVE</button>
+    </div>
+  `;
+  container.insertAdjacentHTML('beforeend', html);
+  batchIndex++;
+}
+
+function removeBatch(btn, batchId) {
+  btn.closest('.batch-row').remove();
+}
+</script>
