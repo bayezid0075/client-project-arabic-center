@@ -8,16 +8,29 @@
 
 <div class="card">
   <div class="card-body">
-    <form action="/admin/students" method="POST">
+    <form action="/admin/students" method="POST" enctype="multipart/form-data">
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Student ID</label>
           <input type="text" name="student_id" class="form-input" value="<%= nextId %>" readonly>
         </div>
         <div class="form-group">
+          <label class="form-label">Registration No</label>
+          <input type="text" name="registration_no" class="form-input" value="<%= registrationNo %>" readonly>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
           <label class="form-label">Full Name *</label>
           <input type="text" name="full_name" class="form-input" required placeholder="Enter full name">
         </div>
+        <div class="form-group">
+          <label class="form-label">Profile Picture</label>
+          <input type="file" name="profile_photo" class="form-input" accept="image/jpeg,image/png,image/gif,image/webp" onchange="previewProfilePhoto(this)">
+        </div>
+      </div>
+      <div id="profilePreview" style="display:none; margin-bottom: 1rem;">
+        <img id="previewImg" src="" alt="Preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid var(--border);">
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -41,6 +54,16 @@
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">NID No</label>
+          <input type="text" name="nid_no" class="form-input" placeholder="National ID number">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Passport No</label>
+          <input type="text" name="passport_no" class="form-input" placeholder="Passport number">
         </div>
       </div>
       <div class="form-row">
@@ -105,6 +128,21 @@
 </div>
 
 <script>
+function previewProfilePhoto(input) {
+  const preview = document.getElementById('profilePreview');
+  const img = document.getElementById('previewImg');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      img.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const courseSelect = document.getElementById('courseSelect');
   const batchSelect = document.getElementById('batchSelect');

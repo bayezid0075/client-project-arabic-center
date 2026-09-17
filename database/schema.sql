@@ -49,11 +49,14 @@ CREATE TABLE IF NOT EXISTS batches (
 CREATE TABLE IF NOT EXISTS students (
   id INT AUTO_INCREMENT PRIMARY KEY,
   student_id VARCHAR(20) NOT NULL UNIQUE,
+  registration_no VARCHAR(50) NOT NULL UNIQUE,
   full_name VARCHAR(100) NOT NULL,
   father_name VARCHAR(100),
   mother_name VARCHAR(100),
   date_of_birth DATE,
   gender ENUM('male', 'female', 'other') DEFAULT 'male',
+  nid_no VARCHAR(50),
+  passport_no VARCHAR(50),
   phone VARCHAR(20),
   email VARCHAR(100),
   address TEXT,
@@ -68,6 +71,7 @@ CREATE TABLE IF NOT EXISTS students (
   FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE SET NULL,
   FOREIGN KEY (batch_id) REFERENCES batches(id) ON DELETE SET NULL,
   INDEX idx_student_id (student_id),
+  INDEX idx_registration_no (registration_no),
   INDEX idx_email (email),
   INDEX idx_phone (phone),
   INDEX idx_status (status)

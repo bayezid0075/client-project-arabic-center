@@ -292,6 +292,28 @@
       color: #bbb;
       z-index: 3;
     }
+    .cert-registration {
+      position: absolute;
+      top: 23mm;
+      right: 15mm;
+      text-align: right;
+      z-index: 3;
+    }
+    .cert-registration-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #aaa;
+      margin-bottom: 0.15rem;
+    }
+    .cert-registration-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #5a4a1f;
+      letter-spacing: 0.05em;
+    }
     .cert-qr {
       position: absolute;
       top: 20mm;
@@ -397,6 +419,12 @@
 
     <div class="cert-number">Certificate No: <%= certificate.certificate_number %></div>
     <div class="cert-verification">Verification: <%= certificate.verification_code %></div>
+    <% if (certificate.registration_no) { %>
+    <div class="cert-registration">
+      <div class="cert-registration-label">Registration No</div>
+      <div class="cert-registration-value"><%= certificate.registration_no %></div>
+    </div>
+    <% } %>
     <div class="cert-qr">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<%= encodeURIComponent(baseUrl + '/verify/' + certificate.verification_code) %>" alt="Scan to verify certificate">
       <div class="cert-qr-label">SCAN TO VERIFY</div>

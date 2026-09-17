@@ -11,9 +11,9 @@ class Student {
     const params = [];
 
     if (search) {
-      query += ` WHERE s.full_name LIKE ? OR s.student_id LIKE ? OR s.phone LIKE ? OR s.email LIKE ?`;
+      query += ` WHERE s.full_name LIKE ? OR s.student_id LIKE ? OR s.registration_no LIKE ? OR s.phone LIKE ? OR s.email LIKE ?`;
       const searchPattern = `%${search}%`;
-      params.push(searchPattern, searchPattern, searchPattern, searchPattern);
+      params.push(searchPattern, searchPattern, searchPattern, searchPattern, searchPattern);
     }
 
     query += ` ORDER BY s.created_at DESC LIMIT ? OFFSET ?`;
@@ -28,9 +28,9 @@ class Student {
     const params = [];
 
     if (search) {
-      query += ` WHERE full_name LIKE ? OR student_id LIKE ? OR phone LIKE ? OR email LIKE ?`;
+      query += ` WHERE full_name LIKE ? OR student_id LIKE ? OR registration_no LIKE ? OR phone LIKE ? OR email LIKE ?`;
       const searchPattern = `%${search}%`;
-      params.push(searchPattern, searchPattern, searchPattern, searchPattern);
+      params.push(searchPattern, searchPattern, searchPattern, searchPattern, searchPattern);
     }
 
     const [rows] = await pool.query(query, params);
@@ -55,17 +55,17 @@ class Student {
 
   static async create(data) {
     const [result] = await pool.query(
-      `INSERT INTO students (student_id, full_name, father_name, mother_name, date_of_birth, gender, phone, email, address, enrollment_date, course_id, batch_id, status, profile_photo, notes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [data.student_id, data.full_name, data.father_name, data.mother_name, data.date_of_birth, data.gender, data.phone, data.email, data.address, data.enrollment_date, data.course_id, data.batch_id, data.status, data.profile_photo, data.notes]
+      `INSERT INTO students (student_id, registration_no, full_name, father_name, mother_name, date_of_birth, gender, nid_no, passport_no, phone, email, address, enrollment_date, course_id, batch_id, status, profile_photo, notes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [data.student_id, data.registration_no, data.full_name, data.father_name, data.mother_name, data.date_of_birth, data.gender, data.nid_no, data.passport_no, data.phone, data.email, data.address, data.enrollment_date, data.course_id, data.batch_id, data.status, data.profile_photo, data.notes]
     );
     return result.insertId;
   }
 
   static async update(id, data) {
     await pool.query(
-      `UPDATE students SET full_name=?, father_name=?, mother_name=?, date_of_birth=?, gender=?, phone=?, email=?, address=?, enrollment_date=?, course_id=?, batch_id=?, status=?, profile_photo=?, notes=? WHERE id=?`,
-      [data.full_name, data.father_name, data.mother_name, data.date_of_birth, data.gender, data.phone, data.email, data.address, data.enrollment_date, data.course_id, data.batch_id, data.status, data.profile_photo, data.notes, id]
+      `UPDATE students SET full_name=?, father_name=?, mother_name=?, date_of_birth=?, gender=?, nid_no=?, passport_no=?, phone=?, email=?, address=?, enrollment_date=?, course_id=?, batch_id=?, status=?, profile_photo=?, notes=? WHERE id=?`,
+      [data.full_name, data.father_name, data.mother_name, data.date_of_birth, data.gender, data.nid_no, data.passport_no, data.phone, data.email, data.address, data.enrollment_date, data.course_id, data.batch_id, data.status, data.profile_photo, data.notes, id]
     );
   }
 
@@ -101,6 +101,14 @@ class Student {
     const lastId = rows[0].student_id;
     const num = parseInt(lastId.replace('STU-', '')) + 1;
     return `STU-${String(num).padStart(3, '0')}`;
+  }
+
+  static async generateRegistrationNo(studentId) {
+    const now = new Date();
+    const datePart = now.getFullYear().toString() +
+      String(now.getMonth() + 1).padStart(2, '0') +
+      String(now.getDate()).padStart(2, '0');
+    return `ATTC-${studentId}-${datePart}`;
   }
 }
 

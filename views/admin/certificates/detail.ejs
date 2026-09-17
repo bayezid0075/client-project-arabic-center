@@ -34,6 +34,10 @@
         <span class="value mono"><%= certificate.student_code %></span>
       </div>
       <div class="detail-item">
+        <span class="label">REGISTRATION NO</span>
+        <span class="value mono"><%= certificate.registration_no || 'N/A' %></span>
+      </div>
+      <div class="detail-item">
         <span class="label">COURSE</span>
         <span class="value"><%= certificate.course_name || 'N/A' %></span>
       </div>

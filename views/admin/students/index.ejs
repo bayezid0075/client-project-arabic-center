@@ -7,7 +7,7 @@
 </div>
 
 <form action="/admin/students" method="GET" class="search-bar">
-  <input type="text" name="search" class="form-input" placeholder="Search by name, ID, phone, or email..." value="<%= search %>">
+  <input type="text" name="search" class="form-input" placeholder="Search by name, ID, registration, phone, or email..." value="<%= search %>">
   <button type="submit" class="btn btn--outline">SEARCH</button>
   <% if (search) { %>
     <a href="/admin/students" class="btn btn--ghost">CLEAR</a>
@@ -21,6 +21,7 @@
       <thead>
         <tr>
           <th>STUDENT ID</th>
+          <th>REGISTRATION NO</th>
           <th>NAME</th>
           <th>COURSE</th>
           <th>BATCH</th>
@@ -33,6 +34,7 @@
         <% students.forEach(function(student) { %>
         <tr>
           <td class="mono"><%= student.student_id %></td>
+          <td class="mono"><%= student.registration_no %></td>
           <td><strong><%= student.full_name %></strong></td>
           <td><%= student.course_name || 'N/A' %></td>
           <td><%= student.batch_name || 'N/A' %></td>

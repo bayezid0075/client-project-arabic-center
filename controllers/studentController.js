@@ -43,11 +43,18 @@ const studentController = {
         Student.getNextStudentId()
       ]);
 
+      const now = new Date();
+      const dateStr = now.getFullYear().toString() +
+        String(now.getMonth() + 1).padStart(2, '0') +
+        String(now.getDate()).padStart(2, '0');
+      const registrationNo = `ATTC-${nextId}-${dateStr}`;
+
       res.render('admin/students/create', {
         title: 'Add New Student',
         courses,
         batches,
         nextId,
+        registrationNo,
         pageName: 'students'
       });
     } catch (error) {
@@ -62,13 +69,14 @@ const studentController = {
       const data = { ...req.body };
       data.course_id = data.course_id || null;
       data.batch_id = data.batch_id || null;
+      data.profile_photo = req.file ? '/uploads/students/' + req.file.filename : null;
       await Student.create(data);
       req.flash('success', 'Student created successfully');
       res.redirect('/admin/students');
     } catch (error) {
       console.error('Student create error:', error);
       if (error.code === 'ER_DUP_ENTRY') {
-        req.flash('error', 'A student with this ID already exists');
+        req.flash('error', 'A student with this ID or registration number already exists');
       } else {
         req.flash('error', 'Error creating student');
       }
@@ -138,6 +146,12 @@ const studentController = {
       const data = { ...req.body };
       data.course_id = data.course_id || null;
       data.batch_id = data.batch_id || null;
+
+      const existingStudent = await Student.findById(req.params.id);
+      data.profile_photo = req.file
+        ? '/uploads/students/' + req.file.filename
+        : (existingStudent ? existingStudent.profile_photo : null);
+
       await Student.update(req.params.id, data);
       req.flash('success', 'Student updated successfully');
       res.redirect(`/admin/students/${req.params.id}`);
