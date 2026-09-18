@@ -43,8 +43,10 @@ class Certificate {
   static async findById(id) {
     const [rows] = await pool.query(`
       SELECT cert.*, s.full_name as student_name, s.student_id as student_code,
-             s.registration_no, s.father_name, s.phone as student_phone, s.email as student_email,
-             c.name as course_name, c.code as course_code, b.name as batch_name
+             s.registration_no, s.father_name, s.passport_no, s.profile_photo,
+             s.phone as student_phone, s.email as student_email,
+             c.name as course_name, c.code as course_code,
+             b.name as batch_name, b.start_date as batch_start_date, b.end_date as batch_end_date
       FROM certificates cert
       LEFT JOIN students s ON cert.student_id = s.id
       LEFT JOIN courses c ON cert.course_id = c.id
