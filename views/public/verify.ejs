@@ -21,13 +21,20 @@
             </div>
           </div>
           <div class="verify-result-body">
+            <div class="verify-student">
+              <% if (certificate.profile_photo) { %>
+                <img src="<%= certificate.profile_photo %>" alt="<%= certificate.student_name %>" class="verify-student-photo">
+              <% } else { %>
+                <div class="verify-student-photo verify-student-photo--placeholder"><%= certificate.student_name ? certificate.student_name.charAt(0).toUpperCase() : '?' %></div>
+              <% } %>
+              <div class="verify-student-meta">
+                <span class="label">STUDENT</span>
+                <span class="verify-student-name"><%= certificate.student_name %></span>
+              </div>
+            </div>
             <div class="verify-detail">
               <span class="label">CERTIFICATE NUMBER</span>
               <span class="value mono"><%= certificate.certificate_number %></span>
-            </div>
-            <div class="verify-detail">
-              <span class="label">STUDENT NAME</span>
-              <span class="value"><%= certificate.student_name %></span>
             </div>
             <div class="verify-detail">
               <span class="label">COURSE</span>

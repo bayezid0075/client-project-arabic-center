@@ -17,6 +17,8 @@ const studentController = {
         Student.countAll(search)
       ]);
 
+      await Invoice.attachBilling(students);
+
       const totalPages = Math.ceil(total / limit);
 
       res.render('admin/students/index', {
@@ -94,17 +96,17 @@ const studentController = {
 
       const [certificates, invoices] = await Promise.all([
         Certificate.findAll(``, 50, 0),
-        Invoice.findAll(``, 50, 0)
+        Invoice.findByStudent(student.id, 100)
       ]);
 
       const studentCerts = certificates.filter(c => c.student_id == req.params.id);
-      const studentInvoices = invoices.filter(i => i.student_id == req.params.id);
+      await Invoice.attachBilling([student]);
 
       res.render('admin/students/detail', {
         title: `Student: ${student.full_name}`,
         student,
         certificates: studentCerts,
-        invoices: studentInvoices,
+        invoices,
         pageName: 'students'
       });
     } catch (error) {

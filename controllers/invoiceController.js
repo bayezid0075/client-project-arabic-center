@@ -2,6 +2,32 @@ const Invoice = require('../models/Invoice');
 const Student = require('../models/Student');
 const Course = require('../models/Course');
 
+function formatMoney(value) {
+  return '৳ ' + (Math.round(value * 100) / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+async function checkCourseBalance(body, excludeInvoiceId = null) {
+  const student = await Student.findById(body.student_id);
+  if (!student) return 'Student not found';
+
+  const fee = parseFloat(student.course_fee) || 0;
+  if (fee <= 0) return null;
+
+  const invoiced = await Invoice.getInvoicedTotal(body.student_id, excludeInvoiceId);
+  const available = Math.max(0, fee - invoiced);
+  const { totalAmount } = Invoice.computeTotals(body);
+
+  if (totalAmount - available > 0.009) {
+    return `Invoice total ${formatMoney(totalAmount)} exceeds the remaining course price ` +
+      `${formatMoney(available)} (course fee ${formatMoney(fee)} − invoiced ${formatMoney(invoiced)})`;
+  }
+
+  return null;
+}
+
 const invoiceController = {
   async getAll(req, res) {
     try {
@@ -41,6 +67,8 @@ const invoiceController = {
         Invoice.generateInvoiceNumber()
       ]);
 
+      await Invoice.attachBilling(students);
+
       res.render('admin/invoices/create', {
         title: 'Create New Invoice',
         students,
@@ -57,6 +85,12 @@ const invoiceController = {
 
   async postCreate(req, res) {
     try {
+      const billingError = await checkCourseBalance(req.body);
+      if (billingError) {
+        req.flash('error', billingError);
+        return res.redirect('/admin/invoices/create');
+      }
+
       await Invoice.create(req.body);
       req.flash('success', 'Invoice created successfully');
       res.redirect('/admin/invoices');
@@ -104,6 +138,8 @@ const invoiceController = {
         return res.redirect('/admin/invoices');
       }
 
+      await Invoice.attachBilling(students, invoice.id);
+
       res.render('admin/invoices/edit', {
         title: `Edit Invoice: ${invoice.invoice_number}`,
         invoice,
@@ -120,6 +156,12 @@ const invoiceController = {
 
   async postUpdate(req, res) {
     try {
+      const billingError = await checkCourseBalance(req.body, req.params.id);
+      if (billingError) {
+        req.flash('error', billingError);
+        return res.redirect(`/admin/invoices/${req.params.id}/edit`);
+      }
+
       await Invoice.update(req.params.id, req.body);
       req.flash('success', 'Invoice updated successfully');
       res.redirect(`/admin/invoices/${req.params.id}`);

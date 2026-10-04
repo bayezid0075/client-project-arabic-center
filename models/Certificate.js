@@ -59,6 +59,7 @@ class Certificate {
   static async verify(certNumber) {
     const [rows] = await pool.query(`
       SELECT cert.*, s.full_name as student_name, s.student_id as student_code,
+             s.profile_photo,
              c.name as course_name, c.code as course_code
       FROM certificates cert
       LEFT JOIN students s ON cert.student_id = s.id

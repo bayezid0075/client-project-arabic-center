@@ -91,28 +91,127 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // --- Invoice Calculator ---
+  // --- Invoice Calculator & Course Price Billing ---
   var invoiceForm = document.getElementById('invoiceForm');
   if (invoiceForm) {
     var amountInput = invoiceForm.querySelector('#amount');
     var discountInput = invoiceForm.querySelector('#discount');
     var taxRateInput = invoiceForm.querySelector('#tax_rate');
     var totalDisplay = invoiceForm.querySelector('#totalDisplay');
+    var studentSelect = invoiceForm.querySelector('#studentSelect');
+    var courseSelect = invoiceForm.querySelector('#course_id');
+    var billingPanel = invoiceForm.querySelector('#billingPanel');
+    var billingFee = invoiceForm.querySelector('#billingFee');
+    var billingInvoiced = invoiceForm.querySelector('#billingInvoiced');
+    var billingDue = invoiceForm.querySelector('#billingDue');
+    var billingHint = invoiceForm.querySelector('#billingHint');
+    var billingWarning = invoiceForm.querySelector('#billingWarning');
+    var amountHint = invoiceForm.querySelector('#amountHint');
 
-    function calculateTotal() {
+    var availableBalance = null;
+    var studentChanged = false;
+
+    function money(value) {
+      return '\u09F3 ' + (Number(value) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function computeTotal() {
       var amount = parseFloat(amountInput ? amountInput.value : 0) || 0;
       var discount = parseFloat(discountInput ? discountInput.value : 0) || 0;
       var taxRate = parseFloat(taxRateInput ? taxRateInput.value : 0) || 0;
       var subtotal = amount - discount;
-      var tax = subtotal * (taxRate / 100);
-      var total = subtotal + tax;
-      if (totalDisplay) {
-        totalDisplay.textContent = '\u09F3 ' + total.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      return subtotal + subtotal * (taxRate / 100);
+    }
+
+    function calculateTotal() {
+      var total = computeTotal();
+      if (totalDisplay) totalDisplay.textContent = money(total);
+
+      if (billingWarning) {
+        if (availableBalance !== null && total > availableBalance + 0.009) {
+          billingWarning.style.display = 'block';
+          billingWarning.textContent = 'Total exceeds the remaining course price of ' + money(availableBalance) + '.';
+        } else {
+          billingWarning.style.display = 'none';
+          billingWarning.textContent = '';
+        }
       }
+    }
+
+    function refreshBilling() {
+      if (!studentSelect || !billingPanel) return;
+
+      var option = studentSelect.options[studentSelect.selectedIndex];
+      if (!option || !option.value) {
+        billingPanel.style.display = 'none';
+        availableBalance = null;
+        if (amountHint) amountHint.textContent = '';
+        if (amountInput) amountInput.removeAttribute('max');
+        calculateTotal();
+        return;
+      }
+
+      var fee = parseFloat(option.getAttribute('data-fee')) || 0;
+      var invoiced = parseFloat(option.getAttribute('data-invoiced')) || 0;
+      var due = parseFloat(option.getAttribute('data-due')) || 0;
+      var courseId = option.getAttribute('data-course-id') || '';
+
+      billingPanel.style.display = '';
+      if (billingFee) billingFee.textContent = money(fee);
+      if (billingInvoiced) billingInvoiced.textContent = money(invoiced);
+      if (billingDue) billingDue.textContent = money(due);
+
+      if (fee > 0) {
+        availableBalance = due;
+
+        if (billingHint) {
+          billingHint.textContent = due > 0
+            ? 'Up to ' + money(due) + ' of the course price is still open to invoice.'
+            : 'The course price is fully invoiced. No further invoice can be created for this student.';
+        }
+        if (amountHint) {
+          amountHint.textContent = due > 0 ? 'Maximum invoice amount: ' + money(due) : 'No course price left to invoice.';
+        }
+        if (amountInput) {
+          if (due > 0) amountInput.setAttribute('max', due.toFixed(2));
+          else amountInput.removeAttribute('max');
+        }
+
+        if (studentChanged && courseSelect && courseId && courseSelect.querySelector('option[value="' + courseId + '"]')) {
+          courseSelect.value = courseId;
+        }
+        if (studentChanged && amountInput) {
+          amountInput.value = due > 0 ? due.toFixed(2) : '';
+        }
+      } else {
+        availableBalance = null;
+        if (billingHint) billingHint.textContent = 'No course fee set for this student, so the billing limit does not apply.';
+        if (amountHint) amountHint.textContent = '';
+        if (amountInput) amountInput.removeAttribute('max');
+      }
+
+      calculateTotal();
     }
 
     [amountInput, discountInput, taxRateInput].forEach(function(input) {
       if (input) input.addEventListener('input', calculateTotal);
     });
+
+    if (studentSelect) {
+      studentSelect.addEventListener('change', function() {
+        studentChanged = true;
+        refreshBilling();
+      });
+      refreshBilling();
+    }
+
+    invoiceForm.addEventListener('submit', function(e) {
+      if (availableBalance !== null && computeTotal() > availableBalance + 0.009) {
+        e.preventDefault();
+        alert('Invoice total exceeds the remaining course price of ' + money(availableBalance) + '.');
+      }
+    });
+
+    calculateTotal();
   }
 });

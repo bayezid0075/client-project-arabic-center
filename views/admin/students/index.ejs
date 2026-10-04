@@ -26,6 +26,7 @@
           <th>COURSE</th>
           <th>BATCH</th>
           <th>PHONE</th>
+          <th>DUE AMOUNT</th>
           <th>STATUS</th>
           <th>ACTIONS</th>
         </tr>
@@ -39,6 +40,13 @@
           <td><%= student.course_name || 'N/A' %></td>
           <td><%= student.batch_name || 'N/A' %></td>
           <td class="mono"><%= student.phone || 'N/A' %></td>
+          <td class="mono" style="<%= student.has_billing_limit && student.due_amount > 0 ? 'color: var(--danger, #e11d48); font-weight: 700;' : '' %>">
+            <% if (student.has_billing_limit) { %>
+              &#2547; <%= parseFloat(student.due_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+            <% } else { %>
+              N/A
+            <% } %>
+          </td>
           <td><span class="badge badge--<%= student.status %>"><%= student.status %></span></td>
           <td>
             <div class="table-actions">

@@ -103,7 +103,34 @@
         <span class="label">STATUS</span>
         <span class="value"><span class="badge badge--<%= student.status %>"><%= student.status.toUpperCase() %></span></span>
       </div>
+      <div class="detail-item">
+        <span class="label">COURSE FEE</span>
+        <span class="value mono">
+          <% if (student.has_billing_limit) { %>
+            &#2547; <%= parseFloat(student.course_fee).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+          <% } else { %>
+            N/A
+          <% } %>
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="label">INVOICED</span>
+        <span class="value mono">&#2547; <%= parseFloat(student.invoiced_total || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></span>
+      </div>
+      <div class="detail-item">
+        <span class="label" style="color: <%= student.has_billing_limit && student.due_amount > 0 ? 'var(--danger, #e11d48)' : '' %>;">DUE AMOUNT</span>
+        <span class="value mono" style="<%= student.has_billing_limit && student.due_amount > 0 ? 'color: var(--danger, #e11d48); font-size: 1.25rem; font-weight: 700;' : '' %>">
+          <% if (student.has_billing_limit) { %>
+            &#2547; <%= parseFloat(student.due_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+          <% } else { %>
+            N/A
+          <% } %>
+        </span>
+      </div>
     </div>
+    <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted);">
+      Due amount = course fee − total invoiced. Every new invoice is deducted from the course price.
+    </p>
   </div>
 </div>
 

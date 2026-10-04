@@ -51,76 +51,21 @@
       width: 240px;
       height: 240px;
       object-fit: contain;
-      opacity: 0.04;
+      opacity: 0.5;
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Classic double border */
-    .cert-border-outer {
+    /* Classic certificate frame: double rules + ornamental chain band */
+    .cert-frame {
       position: absolute;
-      top: 7mm;
-      left: 7mm;
-      right: 7mm;
-      bottom: 7mm;
-      border: 3px solid #8B6914;
-      pointer-events: none;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
-    }
-    .cert-border-inner {
-      position: absolute;
-      top: 10mm;
-      left: 10mm;
-      right: 10mm;
-      bottom: 10mm;
-      border: 1px solid #8B6914;
       pointer-events: none;
-      z-index: 1;
     }
-
-    /* Classic ornamental corners */
-    .cert-corner {
-      position: absolute;
-      width: 45px;
-      height: 45px;
-      pointer-events: none;
-      z-index: 2;
-    }
-    .cert-corner::before,
-    .cert-corner::after {
-      content: '';
-      position: absolute;
-      background: #8B6914;
-    }
-    .cert-corner.tl { top: 8mm; left: 8mm; }
-    .cert-corner.tl::before { top: 0; left: 0; width: 45px; height: 2px; }
-    .cert-corner.tl::after { top: 0; left: 0; width: 2px; height: 45px; }
-
-    .cert-corner.tr { top: 8mm; right: 8mm; }
-    .cert-corner.tr::before { top: 0; right: 0; width: 45px; height: 2px; }
-    .cert-corner.tr::after { top: 0; right: 0; width: 2px; height: 45px; }
-
-    .cert-corner.bl { bottom: 8mm; left: 8mm; }
-    .cert-corner.bl::before { bottom: 0; left: 0; width: 45px; height: 2px; }
-    .cert-corner.bl::after { bottom: 0; left: 0; width: 2px; height: 45px; }
-
-    .cert-corner.br { bottom: 8mm; right: 8mm; }
-    .cert-corner.br::before { bottom: 0; right: 0; width: 45px; height: 2px; }
-    .cert-corner.br::after { bottom: 0; right: 0; width: 2px; height: 45px; }
-
-    /* Corner ornaments (diamond shapes) */
-    .cert-ornament {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: #8B6914;
-      transform: rotate(45deg);
-      z-index: 2;
-    }
-    .cert-ornament.orn-tl { top: 12mm; left: 12mm; }
-    .cert-ornament.orn-tr { top: 12mm; right: 12mm; }
-    .cert-ornament.orn-bl { bottom: 12mm; left: 12mm; }
-    .cert-ornament.orn-br { bottom: 12mm; right: 12mm; }
 
     /* Header layout */
     .cert-header {
@@ -148,7 +93,7 @@
     border: 2px solid #c0392b;
     padding: 3px;
     background: #fff;
-    margin-top: 65px;
+    margin-top: 11px;
     }
 
     .cert-header-info {
@@ -157,7 +102,7 @@
 
     .cert-center-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2.35rem;
+    font-size: 2.25rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     color: #1a1a6e;
@@ -194,6 +139,7 @@
       border: 2px solid #8B6914;
       padding: 2px;
       background: #fff;
+      margin-top: -18px;
     }
 
     /* Certificate metadata (right side) */
@@ -311,6 +257,20 @@
       text-align: center;
     }
 
+    .cert-footer-signature-img {
+      height: 58px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .cert-footer-signature-img img {
+      max-width: 135px;
+      max-height: 58px;
+      object-fit: contain;
+    }
+
     .cert-footer-signature-line {
       width: 130px;
       border-top: 1px solid #333;
@@ -332,10 +292,10 @@
     }
 
     .cert-footer-stamp {
-      width: 70px;
-      height: 70px;
+      width: 88px;
+      height: 88px;
       object-fit: contain;
-      opacity: 0.85;
+      opacity: 0.9;
     }
 
     .cert-footer-qr {
@@ -380,30 +340,67 @@
     <!-- Logo watermark - center -->
     <img src="/images/logo.png" alt="" class="cert-watermark">
 
-    <!-- Classic borders -->
-    <div class="cert-border-outer"></div>
-    <div class="cert-border-inner"></div>
+    <!-- Classic certificate frame: double rules, ornamental band, corner cartouches -->
+    <svg class="cert-frame" viewBox="0 0 2970 2100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <pattern id="certBandH" width="80" height="70" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="#8B6914" stroke-width="3.2" stroke-linecap="round">
+            <path d="M0 7.3H80"/>
+            <path d="M0 62.7H80"/>
+            <path d="M40 16L59 35L40 54L21 35Z"/>
+            <path d="M10 35H21M59 35H70"/>
+            <circle cx="0" cy="35" r="10"/>
+            <circle cx="80" cy="35" r="10"/>
+          </g>
+          <path d="M40 24.3L50.7 35L40 45.7L29.3 35Z" fill="#8B6914"/>
+        </pattern>
+        <pattern id="certBandV" width="70" height="80" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="#8B6914" stroke-width="3.2" stroke-linecap="round">
+            <path d="M7.3 0V80"/>
+            <path d="M62.7 0V80"/>
+            <path d="M16 40L35 21L54 40L35 59Z"/>
+            <path d="M35 10V21M35 59V70"/>
+            <circle cx="35" cy="0" r="10"/>
+            <circle cx="35" cy="80" r="10"/>
+          </g>
+          <path d="M35 29.3L45.7 40L35 50.7L24.3 40Z" fill="#8B6914"/>
+        </pattern>
+        <g id="certCorner" fill="none" stroke="#8B6914" stroke-linecap="round">
+          <path d="M130 22.4C71.5 22.4 22.4 71.5 22.4 130" stroke-width="3.2"/>
+          <path d="M130 77.9C74.8 77.9 77.9 74.8 77.9 130" stroke-width="3.2"/>
+          <path d="M0 59.8C0 26 26 0 59.8 0" stroke-width="3"/>
+          <path d="M54.2 43.8L64.6 54.2L54.2 64.6L43.8 54.2Z" stroke-width="3" fill="#fffdf7"/>
+          <path d="M54.2 49L59.4 54.2L54.2 59.4L49 54.2Z" fill="#8B6914" stroke="none"/>
+        </g>
+      </defs>
 
-    <!-- Corner lines -->
-    <div class="cert-corner tl"></div>
-    <div class="cert-corner tr"></div>
-    <div class="cert-corner bl"></div>
-    <div class="cert-corner br"></div>
+      <!-- Frame rules -->
+      <rect x="18" y="18" width="2934" height="2064" fill="none" stroke="#8B6914" stroke-width="3"/>
+      <rect x="30" y="30" width="2910" height="2040" fill="none" stroke="#8B6914" stroke-width="5"/>
+      <rect x="128" y="128" width="2714" height="1844" fill="none" stroke="#8B6914" stroke-width="4.5"/>
+      <rect x="140" y="140" width="2690" height="1820" fill="none" stroke="#8B6914" stroke-width="3"/>
 
-    <!-- Corner ornaments -->
-    <div class="cert-ornament orn-tl"></div>
-    <div class="cert-ornament orn-tr"></div>
-    <div class="cert-ornament orn-bl"></div>
-    <div class="cert-ornament orn-br"></div>
+      <!-- Ornamental band -->
+      <rect x="160" y="45" width="2650" height="70" fill="url(#certBandH)"/>
+      <rect x="160" y="1985" width="2650" height="70" fill="url(#certBandH)"/>
+      <rect x="45" y="160" width="70" height="1780" fill="url(#certBandV)"/>
+      <rect x="2855" y="160" width="70" height="1780" fill="url(#certBandV)"/>
+
+      <!-- Corner cartouches -->
+      <use href="#certCorner" transform="translate(30,30)"/>
+      <use href="#certCorner" transform="translate(2940,30) scale(-1,1)"/>
+      <use href="#certCorner" transform="translate(30,2070) scale(1,-1)"/>
+      <use href="#certCorner" transform="translate(2940,2070) scale(-1,-1)"/>
+    </svg>
 
     <!-- Header -->
     <div class="cert-header">
       <div class="cert-header-left">
         <img src="/images/logo.png" alt="RTTLC Logo" class="cert-header-logo">
         <div class="cert-header-info">
-          <div class="cert-center-name">Arabic Technical Training Center</div>
-          <div class="cert-center-address">53, Nimitolir Tck, Diabari, Turag, Uttara, Dhaka-1230</div>
-          <div class="cert-center-website">Website : rttlcbd.com</div>
+          <div class="cert-center-name">Arabian Technical Training Center</div>
+          <div class="cert-center-address">Utholi, Shibalay, Manikganj</div>
+          <div class="cert-center-website">Website : arabianttc.com</div>
         </div>
       </div>
       <div class="cert-header-right">
@@ -451,13 +448,15 @@
     <!-- Footer -->
     <div class="cert-footer">
       <div class="cert-footer-section">
-        <div style="height: 40px;"></div>
+        <div class="cert-footer-signature-img">
+          <img src="/images/exam-controller-sign.png" alt="Exam Controller Signature">
+        </div>
         <div class="cert-footer-signature-line"></div>
         <div class="cert-footer-signature-name">Exam Controller</div>
       </div>
 
       <div class="cert-footer-center">
-        <img src="/images/logo.png" alt="Center Stamp" class="cert-footer-stamp">
+        <img src="/images/ins-seal.png" alt="Center Seal" class="cert-footer-stamp">
       </div>
 
       <div class="cert-footer-qr">
@@ -466,7 +465,9 @@
       </div>
 
       <div class="cert-footer-section">
-        <div style="height: 40px;"></div>
+        <div class="cert-footer-signature-img">
+          <img src="/images/administraiton-sign.png" alt="Administrator Signature">
+        </div>
         <div class="cert-footer-signature-line"></div>
         <div class="cert-footer-signature-name">Administrator</div>
       </div>

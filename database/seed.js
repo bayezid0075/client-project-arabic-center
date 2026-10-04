@@ -106,10 +106,10 @@ async function seed() {
 
     const invoices = [
       ['INV-2026-000001', 1, 1, 'Web Development Course - Full Program', 45000.00, 5000.00, 5.00, 2000.00, 42000.00, 42000.00, 0.00, 'paid', '2026-01-15', '2026-02-15', 'Early bird discount applied'],
-      ['INV-2026-000002', 2, 1, 'Web Development Course - Full Program', 45000.00, 0.00, 5.00, 2250.00, 47250.00, 25000.00, 22250.00, 'partial', '2026-01-15', '2026-02-15', null],
-      ['INV-2026-000003', 3, 1, 'Web Development Course - Full Program', 45000.00, 0.00, 5.00, 2250.00, 47250.00, 0.00, 47250.00, 'pending', '2026-02-01', '2026-03-01', null],
+      ['INV-2026-000002', 2, 1, 'Web Development Course - Full Program', 45000.00, 0.00, 0.00, 0.00, 45000.00, 25000.00, 20000.00, 'partial', '2026-01-15', '2026-02-15', null],
+      ['INV-2026-000003', 3, 1, 'Web Development Course - Full Program', 45000.00, 0.00, 0.00, 0.00, 45000.00, 0.00, 45000.00, 'pending', '2026-02-01', '2026-03-01', null],
       ['INV-2026-000004', 4, 2, 'Graphic Design Course - Full Program', 35000.00, 3000.00, 5.00, 1600.00, 33600.00, 33600.00, 0.00, 'paid', '2026-01-20', '2026-02-20', 'Scholarship discount'],
-      ['INV-2026-000005', 5, 3, 'Digital Marketing Course - Full Program', 28000.00, 0.00, 5.00, 1400.00, 29400.00, 15000.00, 14400.00, 'partial', '2026-03-01', '2026-04-01', null]
+      ['INV-2026-000005', 5, 3, 'Digital Marketing Course - Full Program', 28000.00, 0.00, 0.00, 0.00, 28000.00, 15000.00, 13000.00, 'partial', '2026-03-01', '2026-04-01', null]
     ];
 
     for (const inv of invoices) {

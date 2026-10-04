@@ -16,17 +16,40 @@
         </div>
         <div class="form-group">
           <label class="form-label">Student *</label>
-          <select name="student_id" class="form-select" required>
+          <select name="student_id" id="studentSelect" class="form-select" required>
             <% students.forEach(function(student) { %>
-              <option value="<%= student.id %>" <%= invoice.student_id == student.id ? 'selected' : '' %>><%= student.full_name %> (<%= student.student_id %>)</option>
+              <option value="<%= student.id %>"
+                      <%= invoice.student_id == student.id ? 'selected' : '' %>
+                      data-fee="<%= parseFloat(student.course_fee || 0) %>"
+                      data-invoiced="<%= parseFloat(student.invoiced_total || 0) %>"
+                      data-due="<%= parseFloat(student.due_amount || 0) %>"
+                      data-course-id="<%= student.course_id || '' %>"><%= student.full_name %> (<%= student.student_id %>)<% if (student.has_billing_limit) { %> &mdash; Due &#2547; <%= parseFloat(student.due_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %><% } %></option>
             <% }); %>
           </select>
         </div>
       </div>
+      <div class="form-group" id="billingPanel" style="display: none;">
+        <label class="form-label">COURSE PRICE SUMMARY</label>
+        <div style="display: flex; gap: 2.5rem; flex-wrap: wrap; padding: 0.75rem 0;">
+          <div>
+            <span class="label">COURSE FEE</span>
+            <div id="billingFee" class="mono" style="font-size: 1.1rem; font-weight: 700;">&#2547; 0.00</div>
+          </div>
+          <div>
+            <span class="label">ALREADY INVOICED</span>
+            <div id="billingInvoiced" class="mono" style="font-size: 1.1rem; font-weight: 700;">&#2547; 0.00</div>
+          </div>
+          <div>
+            <span class="label">DUE AMOUNT</span>
+            <div id="billingDue" class="mono" style="font-size: 1.1rem; font-weight: 700;">&#2547; 0.00</div>
+          </div>
+        </div>
+        <p id="billingHint" style="font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem;"></p>
+      </div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Course</label>
-          <select name="course_id" class="form-select">
+          <select name="course_id" id="course_id" class="form-select">
             <option value="">Select Course</option>
             <% courses.forEach(function(course) { %>
               <option value="<%= course.id %>" <%= invoice.course_id == course.id ? 'selected' : '' %>><%= course.name %></option>
@@ -52,6 +75,7 @@
         <div class="form-group">
           <label class="form-label">Amount *</label>
           <input type="number" name="amount" id="amount" class="form-input" step="0.01" min="0" value="<%= invoice.amount %>" required>
+          <small id="amountHint" style="display: block; margin-top: 0.35rem; font-size: 0.75rem; color: var(--muted);"></small>
         </div>
         <div class="form-group">
           <label class="form-label">Discount</label>
@@ -81,6 +105,7 @@
       <div class="form-group">
         <label class="form-label">TOTAL AMOUNT</label>
         <div id="totalDisplay" style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; padding: 0.625rem 0;">&#2547; <%= parseFloat(invoice.total_amount).toLocaleString() %></div>
+        <div id="billingWarning" style="display: none; font-size: 0.8rem; font-weight: 700; color: var(--danger, #e11d48);"></div>
       </div>
       <div class="form-group">
         <label class="form-label">Notes</label>

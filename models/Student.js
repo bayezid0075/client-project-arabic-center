@@ -3,7 +3,7 @@ const { pool } = require('../config/database');
 class Student {
   static async findAll(search = '', limit = 20, offset = 0) {
     let query = `
-      SELECT s.*, c.name as course_name, c.code as course_code, b.name as batch_name
+      SELECT s.*, c.name as course_name, c.code as course_code, COALESCE(c.fee, 0) as course_fee, b.name as batch_name
       FROM students s
       LEFT JOIN courses c ON s.course_id = c.id
       LEFT JOIN batches b ON s.batch_id = b.id
@@ -39,7 +39,7 @@ class Student {
 
   static async findById(id) {
     const [rows] = await pool.query(`
-      SELECT s.*, c.name as course_name, c.code as course_code, b.name as batch_name
+      SELECT s.*, c.name as course_name, c.code as course_code, COALESCE(c.fee, 0) as course_fee, b.name as batch_name
       FROM students s
       LEFT JOIN courses c ON s.course_id = c.id
       LEFT JOIN batches b ON s.batch_id = b.id

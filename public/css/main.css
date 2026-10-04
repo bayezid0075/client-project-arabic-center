@@ -214,6 +214,11 @@ h4 { font-size: 1.0625rem; }
 .verify-detail:last-child { border-bottom: none; }
 .verify-detail .label { min-width: auto; }
 .verify-detail .value { font-weight: 500; text-align: left; }
+.verify-student { display: flex; align-items: center; gap: 0.875rem; padding-bottom: 0.875rem; margin-bottom: 0.25rem; border-bottom: 1px solid var(--border-light); }
+.verify-student-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); flex-shrink: 0; }
+.verify-student-photo--placeholder { display: flex; align-items: center; justify-content: center; background-color: var(--cream); color: var(--muted); font-size: 1.5rem; font-weight: 700; }
+.verify-student-meta { display: flex; flex-direction: column; gap: 0.125rem; min-width: 0; }
+.verify-student-name { font-weight: 600; overflow-wrap: anywhere; }
 
 /* --- Features Grid --- */
 .features-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
@@ -236,8 +241,12 @@ h4 { font-size: 1.0625rem; }
 /* --- Footer --- */
 .footer { background-color: var(--ink); color: var(--paper); padding: 3rem 0 1.5rem; }
 .footer-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2rem; }
-.footer-logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; margin-bottom: 0.75rem; font-size: 1rem; }
-.footer-logo-img { height: 40px; width: auto; object-fit: contain; }
+.footer-logo { display: flex; align-items: center; margin-bottom: 0.75rem; }
+.footer-seal { width: 96px; height: 96px; display: block; }
+.footer-seal .seal-ring { fill: none; stroke: rgba(244,240,230,0.35); stroke-width: 1; }
+.footer-seal .seal-ring-outer { stroke: rgba(244,240,230,0.55); }
+.footer-seal .seal-text { fill: var(--paper); font-family: var(--font-mono); font-size: 8px; font-weight: 600; letter-spacing: 1.6px; }
+.footer-seal .seal-mono { fill: var(--orange); font-family: var(--font-sans); font-size: 21px; font-weight: 700; letter-spacing: 1px; }
 .footer-desc { color: rgba(244,240,230,0.6); font-size: 0.85rem; line-height: 1.6; }
 .footer-title { font-size: 0.7rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--orange); margin-bottom: 0.75rem; }
 .footer-links, .footer-contact { list-style: none; }
@@ -341,7 +350,7 @@ h4 { font-size: 1.0625rem; }
   .stats-row .stat-item h3 { font-size: 3rem; }
   .cta-section h2 { font-size: 2rem; }
   .navbar-logo-img { height: 44px; }
-  .footer-logo-img { height: 48px; }
+  .footer-seal { width: 104px; height: 104px; }
   .events-grid { grid-template-columns: repeat(3, 1fr); }
   .event-detail-layout { grid-template-columns: 1fr 320px; gap: 2.5rem; }
 }

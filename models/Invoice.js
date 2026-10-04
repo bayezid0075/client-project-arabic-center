@@ -51,7 +51,7 @@ class Invoice {
     return rows[0] || null;
   }
 
-  static async create(data) {
+  static computeTotals(data) {
     const amount = parseFloat(data.amount) || 0;
     const discount = parseFloat(data.discount) || 0;
     const taxRate = parseFloat(data.tax_rate) || 0;
@@ -60,6 +60,11 @@ class Invoice {
     const totalAmount = subtotal + taxAmount;
     const paidAmount = parseFloat(data.paid_amount) || 0;
     const dueAmount = totalAmount - paidAmount;
+    return { amount, discount, taxRate, taxAmount, totalAmount, paidAmount, dueAmount };
+  }
+
+  static async create(data) {
+    const { amount, discount, taxRate, taxAmount, totalAmount, paidAmount, dueAmount } = Invoice.computeTotals(data);
 
     let paymentStatus = 'pending';
     if (dueAmount <= 0) paymentStatus = 'paid';
@@ -68,20 +73,13 @@ class Invoice {
     const [result] = await pool.query(
       `INSERT INTO invoices (invoice_number, student_id, course_id, description, amount, discount, tax_rate, tax_amount, total_amount, paid_amount, due_amount, payment_status, issue_date, due_date, notes)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [data.invoice_number, data.student_id, data.course_id, data.description, amount, discount, taxRate, taxAmount, totalAmount, paidAmount, dueAmount, paymentStatus, data.issue_date, data.due_date, data.notes]
+      [data.invoice_number, data.student_id, data.course_id, data.description, amount, discount, taxRate, taxAmount, totalAmount, paidAmount, dueAmount, paymentStatus, data.issue_date, data.due_date || null, data.notes]
     );
     return result.insertId;
   }
 
   static async update(id, data) {
-    const amount = parseFloat(data.amount) || 0;
-    const discount = parseFloat(data.discount) || 0;
-    const taxRate = parseFloat(data.tax_rate) || 0;
-    const subtotal = amount - discount;
-    const taxAmount = subtotal * (taxRate / 100);
-    const totalAmount = subtotal + taxAmount;
-    const paidAmount = parseFloat(data.paid_amount) || 0;
-    const dueAmount = totalAmount - paidAmount;
+    const { amount, discount, taxRate, taxAmount, totalAmount, paidAmount, dueAmount } = Invoice.computeTotals(data);
 
     let paymentStatus = data.payment_status || 'pending';
 
@@ -93,6 +91,64 @@ class Invoice {
 
   static async delete(id) {
     await pool.query('DELETE FROM invoices WHERE id = ?', [id]);
+  }
+
+  static async findByStudent(studentId, limit = 100) {
+    const [rows] = await pool.query(`
+      SELECT inv.*, c.name as course_name
+      FROM invoices inv
+      LEFT JOIN courses c ON inv.course_id = c.id
+      WHERE inv.student_id = ?
+      ORDER BY inv.created_at DESC
+      LIMIT ?
+    `, [studentId, limit]);
+    return rows;
+  }
+
+  static async getInvoicedTotal(studentId, excludeInvoiceId = null) {
+    let query = `SELECT COALESCE(SUM(total_amount), 0) as total
+                 FROM invoices
+                 WHERE student_id = ? AND payment_status <> 'cancelled'`;
+    const params = [studentId];
+
+    if (excludeInvoiceId) {
+      query += ' AND id <> ?';
+      params.push(excludeInvoiceId);
+    }
+
+    const [rows] = await pool.query(query, params);
+    return parseFloat(rows[0].total) || 0;
+  }
+
+  static async attachBilling(rows, excludeInvoiceId = null) {
+    if (!rows || rows.length === 0) return rows || [];
+
+    let query = `SELECT student_id, COALESCE(SUM(total_amount), 0) as total
+                 FROM invoices
+                 WHERE payment_status <> 'cancelled'`;
+    const params = [];
+
+    if (excludeInvoiceId) {
+      query += ' AND id <> ?';
+      params.push(excludeInvoiceId);
+    }
+
+    query += ' GROUP BY student_id';
+
+    const [totals] = await pool.query(query, params);
+    const map = {};
+    totals.forEach(t => { map[t.student_id] = parseFloat(t.total) || 0; });
+
+    rows.forEach(row => {
+      const fee = parseFloat(row.course_fee) || 0;
+      const invoiced = map[row.id] || 0;
+      row.course_fee = fee;
+      row.invoiced_total = invoiced;
+      row.due_amount = fee > 0 ? Math.max(0, fee - invoiced) : 0;
+      row.has_billing_limit = fee > 0;
+    });
+
+    return rows;
   }
 
   static async getStats() {
