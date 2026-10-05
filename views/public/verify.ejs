@@ -30,6 +30,10 @@
               <div class="verify-student-meta">
                 <span class="label">STUDENT</span>
                 <span class="verify-student-name"><%= certificate.student_name %></span>
+                <% if (certificate.passport_no) { %>
+                  <span class="label">PASSPORT NO</span>
+                  <span class="value mono"><%= certificate.passport_no %></span>
+                <% } %>
               </div>
             </div>
             <div class="verify-detail">
