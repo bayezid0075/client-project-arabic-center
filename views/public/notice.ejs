@@ -2,17 +2,17 @@
   <div class="container" style="max-width: 800px;">
     <a href="/" style="display: inline-block; margin-bottom: 1.5rem; color: var(--muted); text-decoration: none; font-size: 0.85rem;">&larr; Back to Home</a>
 
-    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 2.5rem;">
+    <div class="notice-card">
       <span class="label">[ NOTICE ]</span>
       <h1 style="margin: 0.75rem 0 1rem; font-size: 1.8rem;"><%= notice.title %></h1>
 
-      <div style="display: flex; gap: 1.5rem; margin-bottom: 2rem; font-size: 0.8rem; color: var(--muted);">
+      <div class="notice-meta">
         <span>Published: <%= notice.created_at ? new Date(notice.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A' %></span>
         <% if (notice.is_pinned) { %><span style="color: var(--red);">&#128204; Pinned</span><% } %>
       </div>
 
       <% if (notice.summary) { %>
-      <div style="font-size: 1.1rem; color: var(--text); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; border-left: 3px solid var(--primary); padding-left: 1rem;">
+      <div style="font-size: 1.1rem; color: var(--ink); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; border-left: 3px solid var(--orange); padding-left: 1rem;">
         <%= notice.summary %>
       </div>
       <% } %>

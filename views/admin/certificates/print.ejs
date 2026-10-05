@@ -322,16 +322,28 @@
     }
     .print-btn:hover { background: #8B6914; }
 
+    /* Screen only: scale the fixed A4 sheet down to fit small viewports */
+    .cert-viewport {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .certificate {
+      transform-origin: top left;
+    }
+
     @media print {
       .print-btn { display: none; }
       body { background: white; }
-      .certificate { margin: 0; box-shadow: none; }
+      .certificate { margin: 0; box-shadow: none; transform: none !important; }
+      .cert-viewport { height: auto !important; overflow: visible !important; }
     }
   </style>
 </head>
 <body>
   <button class="print-btn" onclick="window.print()">PRINT CERTIFICATE</button>
 
+  <div class="cert-viewport">
   <div class="certificate">
     <!-- Background watermark PNGs -->
     <img src="/images/wave-gradient.png" alt="" class="cert-bg-wave wave-top-left">
@@ -473,5 +485,35 @@
       </div>
     </div>
   </div>
+  </div>
+
+  <script>
+    (function () {
+      var cert = document.querySelector('.certificate');
+      var vp = document.querySelector('.cert-viewport');
+      if (!cert || !vp) return;
+
+      function fit() {
+        var avail = document.documentElement.clientWidth;
+        var w = cert.offsetWidth;
+        if (avail >= w) {
+          cert.style.transform = '';
+          vp.style.height = '';
+          return;
+        }
+        var s = avail / w;
+        cert.style.transform = 'scale(' + s + ')';
+        vp.style.height = Math.ceil(cert.offsetHeight * s) + 'px';
+      }
+
+      fit();
+      window.addEventListener('resize', fit);
+      window.addEventListener('beforeprint', function () {
+        cert.style.transform = '';
+        vp.style.height = '';
+      });
+      window.addEventListener('afterprint', fit);
+    })();
+  </script>
 </body>
 </html>

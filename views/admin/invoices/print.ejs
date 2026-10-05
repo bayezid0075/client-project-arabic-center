@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice - <%= invoice.invoice_number %> | Arabic Technical Training Center</title>
+  <title>Invoice - <%= invoice.invoice_number %> | Arabian Technical Training Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -125,6 +125,43 @@
       cursor: pointer; text-transform: uppercase;
     }
     .print-btn:hover { background: #E85D04; }
+
+    /* Screen only: make the A4 sheet fit small viewports */
+    @media screen and (max-width: 1200px) {
+      body { padding: 1rem; }
+      .invoice {
+        width: 100%;
+        min-height: auto;
+        padding: 1.25rem 1rem 1.5rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      }
+      .invoice-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+      }
+      .invoice-logo { flex-wrap: wrap; font-size: 1.1rem; }
+      .invoice-logo-img { height: 40px; }
+      .invoice-logo-text { font-size: 0.85rem; }
+      .invoice-title { text-align: left; }
+      .invoice-title h1 { font-size: 1.5rem; }
+      .invoice-meta { grid-template-columns: 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+      .invoice-table th, .invoice-table td { padding: 0.6rem 0.5rem; font-size: 0.75rem; }
+      .invoice-totals { justify-content: flex-start; margin-bottom: 1.5rem; }
+      .invoice-totals-box { width: 100%; max-width: 320px; }
+      .invoice-footer {
+        position: static;
+        flex-direction: column;
+        gap: 0.35rem;
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+      }
+      .print-btn { top: auto; bottom: 1rem; right: 1rem; }
+    }
+
     @media print {
       .print-btn { display: none; }
       body { background: white; padding: 0; }
@@ -143,10 +180,11 @@
           <span class="invoice-logo-text">Arabic Technical Training Center</span>
         </div>
         <div class="invoice-center-info">
-          123 Training Street, Education District<br>
-          Dhaka, Bangladesh<br>
-          +880 1234-567890<br>
-          info@trainingcenter.com
+          Utholi, Shibalay, Manikganj<br>
+          +880 01718-797715<br>
+          +880 01804-92742<br>
+          +966509774869<br>
+          arabianttc.com
         </div>
       </div>
       <div class="invoice-title">
@@ -235,7 +273,7 @@
 
     <div class="invoice-footer">
       <span>Thank you for your business!</span>
-      <span>Arabic Technical Training Center | <%= invoice.invoice_number %></span>
+      <span>Arabian Technical Training Center | <%= invoice.invoice_number %></span>
     </div>
   </div>
 </body>

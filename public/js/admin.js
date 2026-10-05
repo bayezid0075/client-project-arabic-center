@@ -6,18 +6,22 @@ document.addEventListener('DOMContentLoaded', function() {
   const sidebarOverlay = document.getElementById('sidebarOverlay');
 
   function openSidebar() {
+    if (!sidebar || !sidebarOverlay) return;
     sidebar.classList.add('open');
     sidebarOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (sidebarToggle) sidebarToggle.setAttribute('aria-expanded', 'true');
   }
 
   function closeSidebar() {
+    if (!sidebar || !sidebarOverlay) return;
     sidebar.classList.remove('open');
     sidebarOverlay.classList.remove('active');
     document.body.style.overflow = '';
+    if (sidebarToggle) sidebarToggle.setAttribute('aria-expanded', 'false');
   }
 
-  if (sidebarToggle) {
+  if (sidebarToggle && sidebar) {
     sidebarToggle.addEventListener('click', function(e) {
       e.stopPropagation();
       if (sidebar.classList.contains('open')) {
@@ -38,19 +42,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Close on Escape key
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+    if (e.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
       closeSidebar();
     }
   });
 
   // Close sidebar when clicking a link (mobile)
-  sidebar.querySelectorAll('.sidebar-link').forEach(function(link) {
-    link.addEventListener('click', function() {
-      if (window.innerWidth <= 1024) {
-        closeSidebar();
-      }
+  if (sidebar) {
+    sidebar.querySelectorAll('.sidebar-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 1024) {
+          closeSidebar();
+        }
+      });
     });
-  });
+  }
 
   // --- Tabs ---
   document.querySelectorAll('.tab-btn').forEach(function(btn) {
